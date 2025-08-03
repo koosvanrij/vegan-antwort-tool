@@ -476,4 +476,4 @@ if __name__ == "__main__":
         print("Database tables created!")
         print("Rate limiter activated: 8 requests per 5 minutes per IP")
 
-    app.run(debug=True)
+    app.run(debug=False)
