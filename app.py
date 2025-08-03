@@ -11,6 +11,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import warnings
 from langdetect import detect
 from datetime import datetime, timezone
+from deep_translator import GoogleTranslator
 # ===== RATE LIMITER IMPORTS =====
 from functools import wraps
 import time
@@ -136,7 +137,7 @@ client = anthropic.Anthropic(
 
 # Sentence Transformer Modell laden (einmalig beim Start)
 print("Lade Semantic-Modell...")
-model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')  # Unterstützt DE/EN/NL
+model = SentenceTransformer('all-MiniLM-L6-v2')  # Unterstützt DE/EN/NL
 print("Modell geladen!")
 
 # JSON-Datenbank laden
@@ -150,59 +151,46 @@ db_embeddings = model.encode(db_arguments)
 print(f"Embeddings für {len(db_arguments)} Argumente erstellt!")
 
 
-def translate_answer(english_answer, target_language):
+def translate_to_english(text, detected_language):
     """
-    Translate English answer to target language using Claude
+    Translate user argument to English using Google Translate (no Claude API calls!)
+    """
+    if detected_language == 'en':
+        return text
+
+    # Fix common langdetect confusion: treat Afrikaans as Dutch
+    if detected_language == 'af':
+        detected_language = 'nl'
+
+    try:
+        translator = GoogleTranslator(source=detected_language, target='en')
+        english_text = translator.translate(text)
+        print(f"DEBUG: Google Translate '{text}' ({detected_language}) to English: '{english_text}'")
+        return english_text
+    except Exception as e:
+        print(f"DEBUG: Google Translation to English failed: {e}")
+        return text  # Fallback to original
+
+
+def translate_from_english(english_text, target_language):
+    """
+    Translate English answer to target language using Google Translate (no Claude API calls!)
     """
     if target_language == 'en':
-        return english_answer
+        return english_text
 
     # Fix common langdetect confusion: treat Afrikaans as Dutch
     if target_language == 'af':
-        print(f"DEBUG: Detected Afrikaans, treating as Dutch instead")
         target_language = 'nl'
 
-    lang_names = {
-        'de': 'German',
-        'nl': 'Dutch',
-        'af': 'Afrikaans',  # Often confused with Dutch by langdetect
-        'fr': 'French',
-        'es': 'Spanish',
-        'it': 'Italian',
-        'pt': 'Portuguese',
-        'pl': 'Polish',
-        'ru': 'Russian',
-        'sv': 'Swedish',
-        'da': 'Danish',
-        'no': 'Norwegian',
-        'fi': 'Finnish'
-    }
-
-    target_lang_name = lang_names.get(target_language, None)
-
-    # If we don't recognize the language code, default to English
-    if not target_lang_name:
-        print(f"DEBUG: Unknown language code '{target_language}', defaulting to English")
-        return english_answer
-
-    prompt = f"""Please translate this vegan response to {target_lang_name}. Keep the same tone and meaning:
-
-"{english_answer}"
-
-Translation:"""
-
     try:
-        message = client.messages.create(
-            model="claude-sonnet-4-20250514",
-            max_tokens=200,
-            messages=[{"role": "user", "content": prompt}]  # type: ignore
-        )
-        translated_text = message.content[0].text.strip()
-        print(f"DEBUG: Successfully translated to {target_lang_name}: '{translated_text}'")
+        translator = GoogleTranslator(source='en', target=target_language)
+        translated_text = translator.translate(english_text)
+        print(f"DEBUG: Google Translate '{english_text}' (en) to {target_language}: '{translated_text}'")
         return translated_text
     except Exception as e:
-        print(f"DEBUG: Translation failed: {e}")
-        return english_answer  # Fallback to English if translation fails
+        print(f"DEBUG: Google Translation from English failed: {e}")
+        return english_text  # Fallback to English
 
 
 def find_best_match(user_argument, threshold=0.75):
@@ -308,41 +296,43 @@ def antwort():
         detected_lang = 'en'  # Default to English if detection fails
         print(f"DEBUG: Language detection failed, defaulting to English. Error: {e}")
 
-    # Semantische Suche in der Datenbank
-    best_match, similarity = find_best_match(argument)
+    # NEW: Translate user argument to English for database search (Google Translate - FREE!)
+    english_argument = translate_to_english(argument, detected_lang)
+    print(f"DEBUG: Searching database with English argument: '{english_argument}'")
+
+    # Semantische Suche in der Datenbank (now with English argument)
+    best_match, similarity = find_best_match(english_argument)
 
     if best_match:
         # Match gefunden! Antwort aus Datenbank verwenden
         english_answer = best_match["antwort"]
 
-        # Translate to detected language
-        print(f"DEBUG: Database match - Translating from English to '{detected_lang}'")
-        translated_answer = translate_answer(english_answer, detected_lang)
-        # Remove quotes that translation API might add
-        translated_answer = translated_answer.strip('"').strip("'")
-        print(f"DEBUG: After translation: '{translated_answer}'")  # <-- HINZUFÜGEN
-        print(f"DEBUG: Database translation result: '{translated_answer}'")
+        # Translate answer to detected language (Google Translate - FREE!)
+        print(f"DEBUG: Database match - Translating answer from English to '{detected_lang}'")
+        translated_answer = translate_from_english(english_answer, detected_lang)
+        print(f"DEBUG: Final translated answer: '{translated_answer}'")
 
         return jsonify({
             "antwort": translated_answer,
             "quelle": "datenbank",
             "aehnlichkeit": float(round(similarity, 3)),
             "matching_argument": best_match["argument"],
-            "detected_language": detected_lang
+            "detected_language": detected_lang,
+            "english_search_term": english_argument  # DEBUG info
         })
 
-    # Kein Match gefunden → Claude API verwenden
+    # Kein Match gefunden → Claude API verwenden (only 1 Claude call needed now!)
 
     # SCHRITT 1: Relevanz prüfen
     relevanz_prompt = f"""Is this argument related to veganism, soy, tofu, animal welfare, nutrition, environment, or ethics? Answer only "YES" or "NO".
 
-Argument: "{argument}" """
+Argument: "{english_argument}" """
 
     try:
         relevanz_message = client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=10,
-            messages=[    # type: ignore
+            messages=[  # type: ignore
                 {"role": "user", "content": relevanz_prompt}
             ]
         )
@@ -350,11 +340,11 @@ Argument: "{argument}" """
 
         if "NO" in relevanz_check:
             # Argument ist nicht vegan-relevant
-            not_relevant_response = "The argument doesn't seem to be vegan-related. I'm happy to help with questions about vegan nutrition or animal welfare."
+            not_relevant_response = "This argument doesn't seem to be vegan-related. I'm happy to help with questions about vegan nutrition or animal welfare."
 
-            # Nur übersetzen wenn nicht Englisch
+            # Translate to user language using Google Translate (not Claude!)
             if detected_lang != 'en':
-                translated_response = translate_answer(not_relevant_response, detected_lang)
+                translated_response = translate_from_english(not_relevant_response, detected_lang)
                 return jsonify({
                     "antwort": translated_response,
                     "quelle": "claude_api_not_relevant",
@@ -369,29 +359,33 @@ Argument: "{argument}" """
                     "detected_language": detected_lang
                 })
 
-        # SCHRITT 2: Vegan-Antwort generieren (in der Original-Sprache)
-        antwort_prompt = f"""Als erfahrene/r Veganer/in antwortest du respektvoll und sachlich auf Anti-Vegan-Argumente.
+        # SCHRITT 2: Vegan-Antwort generieren (in English, then translate)
+        antwort_prompt = f"""As an experienced vegan, respond respectfully and factually to anti-vegan arguments.
 
-Argument: "{argument}"
+Argument: "{english_argument}"
 
-Gib eine kurze, faktenbasierte Antwort (max. 50 Wörter) die:
-- Höflich aber bestimmt ist
-- Missverständnisse klärt  
-- Zum Nachdenken anregt
-- Keine Belehrung enthält
+Give a short, fact-based response (max 50 words) that:
+- Is polite but firm
+- Clarifies misconceptions  
+- Encourages reflection
+- Contains no lecturing
 
-Answer in the same language as the argument."""
+Answer in English."""
 
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=1000,
-            messages=[   # type: ignore
+            messages=[  # type: ignore
                 {"role": "user", "content": antwort_prompt}
             ]
         )
 
-        final_response = message.content[0].text.strip()
-        # LOGGING antwort zu den database
+        english_response = message.content[0].text.strip()
+
+        # Translate Claude's English response to user language (Google Translate - FREE!)
+        final_response = translate_from_english(english_response, detected_lang)
+
+        # LOGGING
         try:
             new_claude_log = ClaudeLog(
                 argument=argument.strip(),
@@ -415,7 +409,6 @@ Answer in the same language as the argument."""
             "antwort": "Fehler bei der KI-Antwort: " + str(e),
             "quelle": "fehler"
         })
-
 @app.route("/debug-matching", methods=["POST"])
 def debug_matching():
     """Debug-Route um die Top-5 Matches zu sehen"""
