@@ -1,0 +1,11 @@
+flask
+anthropic
+python-dotenv
+sentence-transformers
+scikit-learn
+numpy
+langdetect
+flask-sqlalchemy
+psycopg2-binary
+flask-migrate
+gunicorn

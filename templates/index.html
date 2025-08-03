@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Vegane Antworthilfe</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Header with hamburger menu */
+        .header {
+            background: #4CAF50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hamburger {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s;
+        }
+
+        .hamburger:hover {
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 5px;
+        }
+
+        .lang-btn {
+            padding: 8px 12px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 12px;
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: #4CAF50;
+        }
+
+        .lang-btn:hover {
+            background: white;
+            color: #4CAF50;
+        }
+
+        /* Slide-out menu */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .slide-menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background: white;
+            z-index: 1001;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .slide-menu.active {
+            left: 0;
+        }
+
+        .menu-header {
+            background: #4CAF50;
+            color: white;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-menu {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .menu-items {
+            padding: 0;
+            list-style: none;
+            margin: 0;
+        }
+
+        .menu-item {
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu-link {
+            display: block;
+            padding: 15px 20px;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .menu-link:hover, .menu-link.active {
+            background: #f5f5f5;
+            color: #4CAF50;
+            border-left: 4px solid #4CAF50;
+        }
+
+        /* Main content */
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .meta-info {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            margin: 2px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .badge.database {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        .badge.api {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        .answer {
+            padding: 15px;
+            background: #f0f8f0;
+            border-left: 4px solid #4CAF50;
+            border-radius: 5px;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        .error {
+            padding: 15px;
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            border-radius: 5px;
+            color: #c62828;
+        }
+        .instruction {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            color: #555;
+            line-height: 1.6;
+            text-align: center;
+            border-left: 4px solid #4CAF50;
+        }
+        .copy-btn {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .copy-btn:hover {
+            background: #45a049;
+        }
+        .copy-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .copy-btn.copied {
+            background: #2e7d32;
+        }
+        .btn {
+            padding: 8px 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #45a049;
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .btn.secondary {
+            background: #81C784;
+        }
+        .btn.secondary:hover {
+            background: #66BB6A;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            box-sizing: border-box;
+            margin: 10px 0;
+        }
+
+        textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #2e7d32;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+
+        .tips-content {
+            line-height: 1.6;
+        }
+
+        .tips-content h3 {
+            color: #2e7d32;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 5px;
+        }
+
+        .tips-content ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .tips-content li {
+            margin-bottom: 8px;
+        }
+
+        .contact-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .header {
+                padding: 12px 15px;
+            }
+
+            .slide-menu {
+                width: 250px;
+                left: -250px;
+            }
+
+            .main-content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with hamburger menu and language selector -->
+    <div class="header">
+        <button class="hamburger" onclick="toggleMenu()">☰</button>
+        <div class="language-selector">
+            <button class="lang-btn" onclick="switchLanguage('de')">🇩🇪 DE</button>
+            <button class="lang-btn" onclick="switchLanguage('en')">🇬🇧 EN</button>
+            <button class="lang-btn" onclick="switchLanguage('nl')">🇳🇱 NL</button>
+        </div>
+    </div>
+
+    <!-- Slide-out menu -->
+    <div class="menu-overlay" onclick="closeMenu()"></div>
+    <div class="slide-menu">
+        <div class="menu-header">
+            <span id="menuTitle">Menu</span>
+            <button class="close-menu" onclick="closeMenu()">×</button>
+        </div>
+        <ul class="menu-items">
+            <li class="menu-item">
+                <a class="menu-link active" onclick="showSection('home')" id="menu-home">🏠 Home</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" onclick="showSection('how-it-works')" id="menu-how">ℹ️ Wie funktioniert das?</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" onclick="showSection('discussion-tips')" id="menu-tips">💡 Diskussions-Tipps</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" onclick="showSection('about')" id="menu-about">📋 Über uns</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-link" onclick="showSection('contact')" id="menu-contact">📧 Kontakt</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <!-- HOME SECTION -->
+        <div id="home" class="section active">
+            <h1 id="title">Vegane Antworthilfe 💬🌱</h1>
+            <p id="instruction" class="instruction">Du bist in einer Diskussion, vielleicht in den sozialen Medien, und jemand schreibt ein Anti-Vegan-Argument. Suchst du nach einer schnellen, angemessenen Antwort? Füge das Argument hier ein oder tippe es und lass dir einen Antwortvorschlag generieren. Du kannst in jeder Sprache schreiben - die Sprache wird erkannt und die Antwort erfolgt in derselben Sprache.</p>
+            <textarea id="argument" placeholder="Gib hier ein Anti-Vegan-Argument ein..."></textarea>
+            <button id="generateBtn" class="btn" onclick="antwortAnfordern()">Antwort erzeugen</button>
+            <div id="antwort"></div>
+        </div>
+
+        <!-- HOW IT WORKS SECTION -->
+        <div id="how-it-works" class="section">
+            <h2 id="howItWorksTitle">Wie funktioniert das Tool?</h2>
+            <ol id="howItWorksList">
+                <li>Du gibst das Argument ein, mit dem du konfrontiert wurdest, in beliebiger Sprache</li>
+                <li>Das Tool erkennt die Sprache des Arguments</li>
+                <li>Das Argument wird intelligent mit einer Liste oft gehörter Argumente verglichen</li>
+                <li>Wenn ein Argument erkannt wird, wird die entsprechende Antwort aus der Liste ausgewählt</li>
+                <li>Falls das Argument keine Übereinstimmung in der Liste hat, generiert KI (Claude) eine Antwort</li>
+                <li>Die Antwort wird auf dem Bildschirm angezeigt und du kannst sie für deine Diskussion kopieren</li>
+            </ol>
+        </div>
+
+        <!-- DISCUSSION TIPS SECTION -->
+        <div id="discussion-tips" class="section">
+            <h2 id="discussionTipsTitle">Over online discussies</h2>
+            <div id="discussionTipsContent" class="tips-content">
+                <!-- Content will be populated by JavaScript based on selected language -->
+            </div>
+        </div>
+
+        <!-- ABOUT SECTION -->
+        <div id="about" class="section">
+            <h2 id="aboutTitle">Über uns</h2>
+            <p id="aboutContent"></p>
+        </div>
+
+        <!-- CONTACT SECTION -->
+        <div id="contact" class="section">
+            <h2 id="contactTitle">Feedback & Kontakt</h2>
+            <div class="contact-form">
+                <div class="form-group">
+                    <label for="feedbackType" id="feedbackTypeLabel">Art des Feedbacks:</label>
+                    <select id="feedbackType" class="form-group input">
+                        <option value="suggestion" id="suggestionOption">Verbesserungsvorschlag</option>
+                        <option value="bug" id="bugOption">Fehler melden</option>
+                        <option value="question" id="questionOption">Frage</option>
+                        <option value="other" id="otherOption">Sonstiges</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="feedbackMessage" id="feedbackMessageLabel">Deine Nachricht:</label>
+                    <textarea id="feedbackMessage" rows="6" placeholder="Teile dein Feedback mit uns..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="feedbackEmail" id="feedbackEmailLabel">E-Mail (optional):</label>
+                    <input type="email" id="feedbackEmail" placeholder="deine@email.com">
+                </div>
+                <button id="sendFeedbackBtn" class="btn" onclick="sendFeedback()">Feedback senden</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Language translations
+        const translations = {
+            de: {
+                // Menu
+                menuTitle: "Menü",
+                menuHome: "🏠 Home",
+                menuHow: "ℹ️ Wie funktioniert das?",
+                menuTips: "💡 Diskussions-Tipps",
+                menuAbout: "📋 Über uns",
+                menuContact: "📧 Kontakt",
+
+                // Home section
+                title: "Vegane Antworthilfe 💬🌱",
+                instruction: "Du bist in einer Diskussion, vielleicht in den sozialen Medien, und jemand schreibt ein Anti-Vegan-Argument. Suchst du nach einer schnellen, angemessenen Antwort? Füge das Argument hier ein oder tippe es und lass dir einen Antwortvorschlag generieren. Du kannst in jeder Sprache schreiben - die Sprache wird erkannt und die Antwort erfolgt in derselben Sprache.",
+                placeholder: "Gib hier ein Anti-Vegan-Argument ein...",
+                generateBtn: "Antwort erzeugen",
+                generating: "Erzeugt Antwort...",
+                errorEmpty: "Bitte gib zuerst ein Argument ein!",
+                errorNetwork: "Fehler:",
+                databaseMatch: "Datenbank-Match",
+                claudeApi: "Claude API",
+                matched: "Gefunden",
+                language: "Sprache",
+                copyBtn: "📋 Kopieren",
+                copied: "✅ Kopiert!",
+
+                // How it works
+                howItWorksTitle: "Wie funktioniert das Tool?",
+                howItWorksList: [
+                    "Du gibst das Argument ein, mit dem du konfrontiert wurdest, in beliebiger Sprache",
+                    "Das Tool erkennt die Sprache des Arguments",
+                    "Das Argument wird intelligent mit einer Liste oft gehörter Argumente verglichen",
+                    "Wenn ein Argument erkannt wird, wird die entsprechende Antwort aus der Liste ausgewählt",
+                    "Falls das Argument keine Übereinstimmung in der Liste hat, generiert KI (Claude) eine Antwort",
+                    "Die Antwort wird auf dem Bildschirm angezeigt und du kannst sie für deine Diskussion kopieren"
+                ],
+
+                // Discussion tips
+                discussionTipsTitle: "Über Online-Diskussionen",
+                discussionTipsContent: `
+                    <p>Im Internet, beispielsweise auf YouTube oder TikTok, findest du viel Material von bekannten und unbekannten veganen Aktivisten, die Diskussionen und Debatten mit Passanten führen. Das kann sehr lehrreich sein, und die inhaltlichen Argumente sind überall wiederverwendbar (wenn du sie auswendig lernst).</p>
+
+                    <p>Aber es gibt große Unterschiede zwischen solchen Gesprächen auf der Straße und Online-Diskussionen in sozialen Medien. Weil online:</p>
+                    <ul>
+                        <li><strong>Jeder kann sofort mitlesen.</strong> Du hast keinen Überblick darüber, wer alles mitliest und mitschaut.</li>
+                        <li><strong>Jeder kann jederzeit in die Diskussion einsteigen.</strong> Du diskutierst mit einer Person, und kurz darauf sind mehrere dabei, möglicherweise auf beiden Seiten.</li>
+                        <li><strong>Es gibt keinen Raum für längere Ausführungen.</strong> Dein Text muss kurz und bündig sein. Niemand liest eine halbe Seite Text, und manche Plattformen erlauben es sowieso nicht.</li>
+                        <li><strong>Der Ton ist anders, weniger zivilisiert.</strong> Menschen werden online viel schneller beleidigend, persönlich und scharf angreifend. Manche sind sogar nur auf Streit aus (die "Trolle").</li>
+                    </ul>
+
+                    <p>Manchmal suchst du selbst ein Gespräch, manchmal landest du versehentlich in einer Diskussion. Manchmal eskaliert ein kleiner Austausch von selbst. Wie erreichst du das beste Ergebnis?</p>
+
+                    <h3>📋 Halte gute, sachliche, prägnante Antworten bereit</h3>
+                    <p>Nicht jeder kennt alle Argumente auswendig. Oder eine lange ethisch-philosophische Abhandlung passt nicht. Dabei will dieses Tool helfen: Die Antworten, die das Tool gibt, haben wir kurz gehalten und gleichzeitig versucht, den Kern der Argumentation zu bewahren.</p>
+
+                    <h3>👥 Sei dir deines Publikums bewusst</h3>
+                    <ul>
+                        <li>Eine Person, die alle möglichen Gegenargumente bringt, wird sich in einer Online-Diskussion nicht überzeugen lassen.</li>
+                        <li>Du diskutierst eigentlich nur selten wirklich für die Person, die antwortet, sondern für die viel größere Gruppe der stillen Leser.</li>
+                        <li>Diese stillen Beobachter sind oft offener für neue Perspektiven. Und sie können es schätzen, wenn du cool bleibst.</li>
+                    </ul>
+
+                    <h3>🧘 Bleibe ruhig, sachlich und respektvoll</h3>
+                    <ul>
+                        <li>Andere können respektlos und beleidigend gegenüber deiner Gruppe oder dir persönlich werden. Du könntest versucht sein, auf demselben Niveau zu antworten. Tu das nicht.</li>
+                        <li>Konzentriere dich auf Fakten, nicht auf Angriffe. Du kannst sie ansprechen: "Es ist nicht nötig, persönlich beleidigend zu werden".</li>
+                        <li>Respekt macht deine Argumente stärker, nicht schwächer. Und denke an die stillen Mitleser, die schätzen das.</li>
+                        <li>Fakten und Zahlen sprechen manchmal für sich. Die Antworten dieses Tools enthalten manchmal Zahlen. Diese sind durch Forschung belegt.</li>
+                    </ul>
+
+                    <h3>🚪 Wisse, wann es besser ist aufzuhören</h3>
+                    <ul>
+                        <li>Manchmal triffst du auf Trolle, die wollen provozieren, nicht lernen. Der wichtigste Grund, manchmal noch zu antworten, sind die stillen Mitleser.</li>
+                        <li>Wenn eine Antwort wirklich nur Beleidigungen und keine Argumente enthält, gibt es eigentlich keinen Grund zu antworten. Füttere die Trolle nicht. Lass sie stehen. Die Beleidigungen sagen alles über den Schreiber, nichts über dich.</li>
+                        <li>Manche Diskussionen sind deine persönliche Energie nicht wert. Das musst du selbst einschätzen, das ist für jeden anders und auch für jede Person zu verschiedenen Zeiten anders.</li>
+                        <li>Nach dem Austausch aller Argumente kannst du auch sagen: "Wir sehen das unterschiedlich" und weitermachen. Die stillen Mitleser verstehen das.</li>
+                    </ul>
+                `,
+
+                // About
+                aboutTitle: "Über uns",
+                aboutContent: "Diese App/Webseite ist eine Eigeninitiative. Meine Frau und ich leben seit September 2017 vegan. <br><br> Wir sind gelegentlich in sozialen Medien und Nachrichtenforen aktiv. Wir sind keine Vollzeit-Vegan-Aktivisten, aber manchmal sieht man, wie eine Unterhaltung läuft und möchte etwas dazu beitragen. Dann tauchen plötzlich die unerwartetsten Argumente auf, und darauf fundiert zu antworten, braucht viel Zeit.  Zeit, die ich oft nicht habe. Vollzeit-Debattierer kennen alle Argumente und Fakten auswendig, aber wie gesagt, das sind wir nicht.<br><br>Daraus ist diese Idee entstanden. Eine möglichst einfache App/Webseite, die einem hilft.<br><br>Also habe ich nach einer 25-jährigen Pause wieder mit dem Programmieren begonnen, und dieses Tool ist das Ergebnis.<br><br>Ziel ist es, schnell kurze, sachliche, respektvolle und durchdachte Antworten geben zu können, die nicht nur informieren, sondern auch zu produktiven Gesprächen beitragen. <br><br>Was ich sonst noch erlebt habe: Die auf Youtube & Co gefundenen Outreach-Konversationen sind super beeindruckend. Aber online haben sie nicht den gleichen Erfolg.  Die Themen und Argumente sind zwar die gleichen, aber die Dynamik ist eine ganz andere.  Deshalb habe ich unsere Erfahrungen damit, was online funktioniert und was nicht, in Diskussionstipps zusammengefasst.<br><br>Wir stellen sie nun offen zur Verfügung, denn wer weiß, vielleicht gibt es ja mehrere Personen mit den gleichen Erfahrungen, für die das nützlich sein könnte.<br><br>Feedback und Ideen sind immer willkommen, im Feedback-Bereich.<br><br>Koos van Rij",
+
+                // Contact
+                contactTitle: "Feedback & Kontakt",
+                feedbackTypeLabel: "Art des Feedbacks:",
+                suggestionOption: "Verbesserungsvorschlag",
+                bugOption: "Fehler melden",
+                questionOption: "Frage",
+                otherOption: "Sonstiges",
+                feedbackMessageLabel: "Deine Nachricht:",
+                feedbackEmailLabel: "E-Mail (optional):",
+                sendFeedbackBtn: "Feedback senden",
+                feedbackPlaceholder: "Teile dein Feedback mit uns..."
+            },
+            en: {
+                // Menu
+                menuTitle: "Menu",
+                menuHome: "🏠 Home",
+                menuHow: "ℹ️ How It Works",
+                menuTips: "💡 Discussion Tips",
+                menuAbout: "📋 About",
+                menuContact: "📧 Contact",
+
+                // Home section
+                title: "Vegan Response Helper 💬🌱",
+                instruction: "You are in a discussion, somewhere on social media perhaps, and someone writes an anti-vegan argument. Looking for a quick adequate answer? Paste or type the argument here and generate a suggestion for an answer. You can write in any language - the language will be detected and the answer will be in that same language.",
+                placeholder: "Enter an anti-vegan argument here...",
+                generateBtn: "Generate Answer",
+                generating: "Generating Answer...",
+                errorEmpty: "Please enter an argument first!",
+                errorNetwork: "Error:",
+                databaseMatch: "Database Match",
+                claudeApi: "Claude API",
+                matched: "Matched",
+                language: "Language",
+                copyBtn: "📋 Copy",
+                copied: "✅ Copied!",
+
+                // How it works
+                howItWorksTitle: "How Does The Tool Work?",
+                howItWorksList: [
+                    "You type in the argument that you have been confronted with, in any language",
+                    "The tool detects the language of the argument",
+                    "The argument is compared with an intelligent match to a list of often-heard arguments",
+                    "When an argument is recognized, the corresponding answer is selected from the list",
+                    "If the argument does not have a match in the list, AI (Claude) generates an answer",
+                    "The answer is shown in the screen, and you can copy it for use in your discussion"
+                ],
+
+                // Discussion tips
+                discussionTipsTitle: "About Online Discussions",
+                discussionTipsContent: `
+                    <p>On the internet, for example on YouTube or TikTok, you can find a lot of material from well-known and unknown vegan advocates having discussions and debates with passersby. This can be very educational, and the content arguments can be reused everywhere (if you memorize them).</p>
+
+                    <p>But there are big differences between such conversations on the street and online discussions on social media. Because online:</p>
+                    <ul>
+                        <li><strong>Everyone can read along immediately.</strong> You have no view of who is all reading and watching along.</li>
+                        <li><strong>Anyone can jump into the discussion at any time.</strong> You're discussing with one person, and shortly after there are several participating, possibly on both sides.</li>
+                        <li><strong>There is no room for longer explanations.</strong> Your text must be short and concise. Nobody reads half a page of text, and some platforms don't allow it anyway.</li>
+                        <li><strong>The tone is different, less civilized.</strong> People become insulting, personal and sharply attacking much faster online. Some are even purely looking for trouble (the "Trolls").</li>
+                    </ul>
+
+                    <p>Sometimes you go looking for a conversation yourself, sometimes you accidentally end up in a discussion. Sometimes a small exchange escalates by itself. How do you achieve the best result there?</p>
+
+                    <h3>📋 Have good, factual, concise answers ready</h3>
+                    <p>Not everyone knows all arguments by heart. Or a long ethical philosophical treatise doesn't fit. This tool wants to help with that: we have kept the answers that the tool gives short, while trying to preserve the core of the argument.</p>
+
+                    <h3>👥 Be aware of your audience</h3>
+                    <ul>
+                        <li>A person who gives all kinds of counter-arguments will not be convinced in an online discussion.</li>
+                        <li>You're actually rarely really discussing for the person who responds, but for the much larger group of silent readers.</li>
+                        <li>These silent observers are often more open to new perspectives. And they can appreciate it if you stay cool.</li>
+                    </ul>
+
+                    <h3>🧘 Stay calm, factual and respectful</h3>
+                    <ul>
+                        <li>Others can become disrespectful and insulting towards your group or towards you personally. You may be tempted to respond at the same level. Don't do that.</li>
+                        <li>Focus on facts, not attacks. You can address them: "it's not necessary to become personally insulting".</li>
+                        <li>Respect makes your arguments stronger, not weaker. And think of the silent readers, they appreciate this.</li>
+                        <li>Facts and figures sometimes speak for themselves. The answers from this tool sometimes include figures. These are proven by research.</li>
+                    </ul>
+
+                    <h3>🚪 Know when it's better to stop</h3>
+                    <ul>
+                        <li>Sometimes you encounter trolls, and they want to provoke, not learn. The main reason to sometimes still respond are the silent readers.</li>
+                        <li>If a response really only contains insults and no arguments, there's actually no reason to respond to it. Don't feed the trolls. Leave them alone. The insults say everything about the writer, nothing about you.</li>
+                        <li>Some discussions are not worth your personal energy, you have to assess that yourself, that's different for everyone and that's also different for each person at different times.</li>
+                        <li>After exchanging all arguments, you can also say: "we see this differently" and move on. The silent readers understand that.</li>
+                    </ul>
+                `,
+
+                // About
+                aboutTitle: "About Us",
+                aboutContent: "This app/website is a personal initiative. My wife and I have been vegan since September 2017. <br><br>We are occasionally active on social media and news forums. We're not full-time vegan activists, but sometimes you see a conversation going on and want to add to it. Then suddenly the most unexpected arguments pop up and it takes a lot of time to respond to them.  Time that I often don't have. Full-time debaters know all the arguments and facts by heart, but as mentioned, we are not..<br><br>That's where this idea came from. An app/website that is as simple as possible to help you.<br><br>So after a 25-year break, I started programming again and this tool is the result.<br><br>The aim is to be able to quickly provide short, factual, respectful and thoughtful answers that not only inform, but also contribute to productive conversations.<br><br>What I also experienced: The outreach conversations found on Youtube & Co are super impressive. But they don't have the same success online.  The topics and arguments are the same, but the dynamics are completely different.  That's why I've summarised our experiences of what works and what doesn't, online in discussion tips.<br><br>We are now making the tool openly available, because who knows, maybe there are several people with the same experiences for whom this could be useful.<br><br>Feedback and ideas are always welcome<br><br>Koos van Rij",
+
+                // Contact
+                contactTitle: "Feedback & Contact",
+                feedbackTypeLabel: "Type of Feedback:",
+                suggestionOption: "Suggestion",
+                bugOption: "Bug Report",
+                questionOption: "Question",
+                otherOption: "Other",
+                feedbackMessageLabel: "Your Message:",
+                feedbackEmailLabel: "Email (optional):",
+                sendFeedbackBtn: "Send Feedback",
+                feedbackPlaceholder: "Share your feedback with us..."
+            },
+            nl: {
+                // Menu
+                menuTitle: "Menu",
+                menuHome: "🏠 Home",
+                menuHow: "ℹ️ Hoe Werkt Het",
+                menuTips: "💡 Discussie Tips",
+                menuAbout: "📋 Over Ons",
+                menuContact: "📧 Contact",
+
+                // Home section
+                title: "Vegan Antwoordhulp 💬🌱",
+                instruction: "Je bent in een discussie, misschien op social media, en iemand schrijft een anti-vegan argument. Op zoek naar een snel en adequaat antwoord? Plak of typ het argument hier en genereer een suggestie voor een antwoord. Je kunt in elke taal schrijven - de taal wordt gedetecteerd en het antwoord komt in diezelfde taal.",
+                placeholder: "Voer hier een anti-vegan argument in...",
+                generateBtn: "Antwoord Genereren",
+                generating: "Genereert Antwoord...",
+                errorEmpty: "Voer eerst een argument in!",
+                errorNetwork: "Fout:",
+                databaseMatch: "Database Match",
+                claudeApi: "Claude API",
+                matched: "Gevonden",
+                language: "Taal",
+                copyBtn: "📋 Kopiëren",
+                copied: "✅ Gekopieerd!",
+
+                // How it works
+                howItWorksTitle: "Hoe Werkt De Tool?",
+                howItWorksList: [
+                    "Je typt het argument in waarmee je geconfronteerd werd, in elke taal",
+                    "De tool detecteert de taal van het argument",
+                    "Het argument wordt intelligent vergeleken met een lijst van vaak gehoorde argumenten",
+                    "Als een argument herkend wordt, wordt het bijbehorende antwoord uit de lijst geselecteerd",
+                    "Als het argument geen match heeft in de lijst, genereert AI (Claude) een antwoord",
+                    "Het antwoord wordt op het scherm getoond en je kunt het kopiëren voor gebruik in je discussie"
+                ],
+
+                // Discussion tips
+                discussionTipsTitle: "Over online discussies",
+                discussionTipsContent: `
+                    <p>Op het internet, bijvoorbeeld YouTube, TikTok, kan je veel materiaal vinden van bekende en onbekende vegan advocates die discussies en debatten hebben met voorbijgangers. Dit kan heel leerzaam zijn, en de inhoudelijke argumenten zijn overal te hergebruiken (als je ze uit het hoofd leert).</p>
+
+                    <p>Maar er zijn grote verschillen tussen zo'n gesprek tussen mensen op straat en een online discussie op social media:</p>
+                    <ul>
+                        <li><strong>Iedereen kan meteen meelezen.</strong> Je hebt geen zicht op wie er allemaal meeleest en meekijkt.</li>
+                        <li><strong>Iedereen kan op elk moment instappen in de discussie.</strong> Je discussieert met een persoon, en even later zijn er meerdere die meediscussieren, mogelijk aan beide kanten.</li>
+                        <li><strong>Er is geen ruimte voor langere uiteenzettingen.</strong> Je tekst moet kort en bondig zijn. Niemand leest een halve pagina tekst, en sommige platforms laten het sowieso niet toe.</li>
+                        <li><strong>De toon is anders, minder beschaafd.</strong> Mensen worden online veel sneller beledigend, persoonlijk en scherp aanvallend. Sommigen zijn zelfs puur uit op ruzie (de "Trollen").</li>
+                    </ul>
+
+                    <p>Soms ga je zelf op zoek naar een gesprek, soms beland je per ongeluk in een discussie. Soms escaleert een kleine uitwisseling vanzelf. Hoe bereik je daar het beste resultaat?</p>
+
+                    <h3>📋 Heb goede, feitelijke, bondige antwoorden paraat</h3>
+                    <p>Niet iedereen kent alle argumenten uit het hoofd. Of een lang ethisch filosofisch betoog past niet. Daar wil dit tool bij helpen: de antwoorden die het tool geeft hebben we kort gehouden, en tegelijkertijd wel de kern van het betoog geprobeerd te bewaren.</p>
+
+                    <h3>👥 Wees je bewust van je publiek</h3>
+                    <ul>
+                        <li>Een persoon die allerlei tegenargumenten geeft zal zich niet laten overtuigen in een online discussie.</li>
+                        <li>Je discussieert eigenlijk maar zelden echt voor de persoon die reageert, maar voor de veel grotere groep van stille lezers.</li>
+                        <li>Deze stille toeschouwers staan vaak meer open voor nieuwe perspectieven. En ze kunnen het waarderen als je cool blijft.</li>
+                    </ul>
+
+                    <h3>🧘 Blijf kalm, feitelijk en respectvol</h3>
+                    <ul>
+                        <li>Anderen kunnen respectloos en beledigend worden naar jouw groep of naar jou persoonlijk. Je kan de neiging krijgen op hetzelfde niveau terug te reageren. Doe dat niet.</li>
+                        <li>Focus op feiten, niet op aanvallen. Je kan ze wel aanspreken "het is niet nodig persoonlijk beledigend te worden".</li>
+                        <li>Respect maakt je argumenten sterker, niet zwakker. En denk aan de stille meelezers, die waarderen dit.</li>
+                        <li>Feiten, cijfers spreken soms voor zich. De antwoorden van deze tool geven soms cijfers mee. Die zijn door onderzoeken bewezen.</li>
+                    </ul>
+
+                    <h3>🚪 Weet wanneer het beter is om te stoppen</h3>
+                    <ul>
+                        <li>Soms tref je trollen, en die willen provoceren, niet leren. De belangrijkste reden om soms nog terug te reageren zijn de stille meelezers.</li>
+                        <li>Als een reactie echt alleen maar beledigingen bevat en geen argumenten, is er eigenlijk geen reden er op te reageren. Niet de trollen voeren. Laat ze staan. De beledigingen zeggen alles over de schrijver, niets over jou.</li>
+                        <li>Sommige discussies zijn je persoonlijke energie niet waard, dat moet je zelf inschatten, dat is voor iedereen anders en dat is ook voor elk persoon op andere momenten anders.</li>
+                        <li>Na uitwisseling van alle argumenten, kan je ook zeggen: "we zien dit duidelijk anders" en te stoppen. De stille meelezers snappen dat.</li>
+                    </ul>
+                `,
+
+                // About
+                aboutTitle: "Over Ons",
+                aboutContent: "Deze app/webpage is een eigen initiatief. Mijn vrouw en ik zijn sinds september 2017 vegan.<br><br>We zijn af en toe actief op social media en nieuwsforums. Geen fulltime vegan activisten, maar soms zie je een gesprek lopen en wil je toch even bijdragen. Dan komen er opeens de meest onverwachte argumenten, en om daar weer gefundeerd op te antwoorden, kost veel tijd. Tijd, die ik dan vaak niet heb. Fulltime debaters kennen alle argumenten en feiten uit het hoofd, maar ja, dat zijn wij zoals gezegd niet.<br><br>Van daaruit kwam dit idee. Een zo simpel mogelijke app/webpage die je helpt.<br><br>Dus ben ik na 25 jaar pauze weer begonnen met programmeren, met deze tool als gevolg...<br><br>Het doel is het snel kunnen geven van korte, feitelijke, respectvolle en doordachte antwoorden die niet alleen informeren maar ook bijdragen aan productieve gesprekken. <br><br>Wat ik verder ervaren heb: De outreach gesprekken die je op Youtube & Co vindt, zijn super indrukwekkend. Maar, online lukken ze niet op dezelfde manier.  De themas en de argumenten zijn wel dezelfde, maar dynamiek is totaal anders.  Daarom heb ik bij discussietips onze ervaringen met wat <b>online</b> wel en niet werkt, samengevat.<br><br>We stellen het nu open beschikbaar, want wie weet zijn er meerdere mensen met dezelfde ervaringen voor wie dit handig kan zijn.<br><br>Feedback en ideeën zijn altijd welkom, in de feedback sectie.<br><br>Koos van Rij",
+
+                // Contact
+                contactTitle: "Feedback & Contact",
+                feedbackTypeLabel: "Type Feedback:",
+                suggestionOption: "Suggestie",
+                bugOption: "Bug Rapport",
+                questionOption: "Vraag",
+                otherOption: "Anders",
+                feedbackMessageLabel: "Jouw Bericht:",
+                feedbackEmailLabel: "Email (optioneel):",
+                sendFeedbackBtn: "Feedback Versturen",
+                feedbackPlaceholder: "Deel je feedback met ons..."
+            }
+        };
+
+        let currentLanguage = 'de';
+        let lastAnswer = '';
+        let currentSection = 'home';
+
+        // Menu functions
+        function toggleMenu() {
+            const overlay = document.querySelector('.menu-overlay');
+            const menu = document.querySelector('.slide-menu');
+
+            overlay.classList.add('active');
+            menu.classList.add('active');
+        }
+
+        function closeMenu() {
+            const overlay = document.querySelector('.menu-overlay');
+            const menu = document.querySelector('.slide-menu');
+
+            overlay.classList.remove('active');
+            menu.classList.remove('active');
+        }
+
+        // Navigation functions
+        function showSection(sectionId) {
+            // Close menu when section is selected
+            closeMenu();
+
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update menu navigation
+            document.querySelectorAll('.menu-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Find and activate the correct menu link
+            const menuLinks = {
+                'home': 'menu-home',
+                'how-it-works': 'menu-how',
+                'discussion-tips': 'menu-tips',
+                'about': 'menu-about',
+                'contact': 'menu-contact'
+            };
+
+            document.getElementById(menuLinks[sectionId]).classList.add('active');
+            currentSection = sectionId;
+        }
+
+        // Initialize language based on browser preference
+        function initializeLanguage() {
+            const browserLang = navigator.language.slice(0, 2);
+            const supportedLangs = ['de', 'en', 'nl'];
+            const initialLang = supportedLangs.includes(browserLang) ? browserLang : 'de';
+            switchLanguage(initialLang);
+        }
+
+        // Switch language function
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            const t = translations[lang];
+
+            // Update menu
+            document.getElementById('menuTitle').textContent = t.menuTitle;
+            document.getElementById('menu-home').textContent = t.menuHome;
+            document.getElementById('menu-how').textContent = t.menuHow;
+            document.getElementById('menu-tips').textContent = t.menuTips;
+            document.getElementById('menu-about').textContent = t.menuAbout;
+            document.getElementById('menu-contact').textContent = t.menuContact;
+
+            // Update home section
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('instruction').textContent = t.instruction;
+            document.getElementById('argument').placeholder = t.placeholder;
+            document.getElementById('generateBtn').textContent = t.generateBtn;
+
+            // Update how it works section
+            document.getElementById('howItWorksTitle').textContent = t.howItWorksTitle;
+            const howItWorksList = document.getElementById('howItWorksList');
+            howItWorksList.innerHTML = '';
+            t.howItWorksList.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                howItWorksList.appendChild(li);
+            });
+
+            // Update discussion tips section
+            document.getElementById('discussionTipsTitle').textContent = t.discussionTipsTitle;
+            document.getElementById('discussionTipsContent').innerHTML = t.discussionTipsContent;
+
+            // Update about section
+            document.getElementById('aboutTitle').textContent = t.aboutTitle;
+            document.getElementById('aboutContent').innerHTML = t.aboutContent;
+
+            // Update contact section
+            document.getElementById('contactTitle').textContent = t.contactTitle;
+            document.getElementById('feedbackTypeLabel').textContent = t.feedbackTypeLabel;
+            document.getElementById('suggestionOption').textContent = t.suggestionOption;
+            document.getElementById('bugOption').textContent = t.bugOption;
+            document.getElementById('questionOption').textContent = t.questionOption;
+            document.getElementById('otherOption').textContent = t.otherOption;
+            document.getElementById('feedbackMessageLabel').textContent = t.feedbackMessageLabel;
+            document.getElementById('feedbackEmailLabel').textContent = t.feedbackEmailLabel;
+            document.getElementById('sendFeedbackBtn').textContent = t.sendFeedbackBtn;
+            document.getElementById('feedbackMessage').placeholder = t.feedbackPlaceholder;
+
+            // Update page language and title
+            document.querySelector('html').lang = lang;
+            document.querySelector('title').textContent = t.title.replace(' 💬🌱', '');
+
+            // Update active language button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event?.target?.classList.add('active') ||
+            document.querySelector(`[onclick="switchLanguage('${lang}')"]`).classList.add('active');
+        }
+
+        // Copy to clipboard function
+        async function copyToClipboard() {
+            const t = translations[currentLanguage];
+            const copyBtn = document.getElementById('copyBtn');
+
+            if (!lastAnswer) return;
+
+            try {
+                await navigator.clipboard.writeText(lastAnswer);
+                copyBtn.textContent = t.copied;
+                copyBtn.classList.add('copied');
+                setTimeout(() => {
+                    copyBtn.textContent = t.copyBtn;
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                const textArea = document.createElement('textarea');
+                textArea.value = lastAnswer;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                copyBtn.textContent = t.copied;
+                copyBtn.classList.add('copied');
+                setTimeout(() => {
+                    copyBtn.textContent = t.copyBtn;
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            }
+        }
+
+        // Main function to request answer
+        async function antwortAnfordern() {
+            const argument = document.getElementById("argument").value.trim();
+            const generateBtn = document.getElementById("generateBtn");
+            const antwortDiv = document.getElementById("antwort");
+            const t = translations[currentLanguage];
+
+            if (!argument) {
+                alert(t.errorEmpty);
+                return;
+            }
+
+            generateBtn.disabled = true;
+            generateBtn.textContent = t.generating;
+            antwortDiv.innerHTML = '';
+            lastAnswer = '';
+
+            try {
+                const res = await fetch("/antwort", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ argument })
+                });
+
+                const data = await res.json();
+                lastAnswer = data.antwort;
+
+                let resultHTML = `<div class="answer">${data.antwort}</div>`;
+                resultHTML += `<button id="copyBtn" class="copy-btn" onclick="copyToClipboard()">${t.copyBtn}</button>`;
+
+                if (data.quelle || data.aehnlichkeit !== undefined) {
+                    resultHTML += '<div class="meta-info">';
+                    if (data.quelle === 'datenbank') {
+                        resultHTML += `<span class="badge database">${t.databaseMatch} (${data.aehnlichkeit})</span>`;
+                        if (data.matching_argument) {
+                            resultHTML += `<span class="badge">${t.matched}: "${data.matching_argument}"</span>`;
+                        }
+                    } else if (data.quelle === 'claude_api') {
+                        resultHTML += `<span class="badge api">${t.claudeApi}</span>`;
+                    }
+                    if (data.detected_language) {
+                        resultHTML += `<span class="badge">${t.language}: ${data.detected_language}</span>`;
+                    }
+                    resultHTML += '</div>';
+                }
+
+                antwortDiv.innerHTML = resultHTML;
+
+            } catch (error) {
+                antwortDiv.innerHTML = `<div class="error">${t.errorNetwork} ${error.message}</div>`;
+                lastAnswer = '';
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.textContent = t.generateBtn;
+            }
+        }
+
+// Send feedback function
+async function sendFeedback() {
+    const type = document.getElementById('feedbackType').value;
+    const message = document.getElementById('feedbackMessage').value.trim();
+    const email = document.getElementById('feedbackEmail').value.trim();
+    const sendBtn = document.getElementById('sendFeedbackBtn');
+
+    if (!message) {
+        alert('Please enter a message!');
+        return;
+    }
+
+    sendBtn.disabled = true;
+    sendBtn.textContent = 'Sending...';
+
+    try {
+        // Send to your Flask backend
+        const response = await fetch('/feedback', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: `[${type}] ${message}`, // Include feedback type in message
+                email: email || null
+            })
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+            alert('Thank you for your feedback!');
+            // Clear the form
+            document.getElementById('feedbackMessage').value = '';
+            document.getElementById('feedbackEmail').value = '';
+            document.getElementById('feedbackType').value = 'suggestion'; // Reset to default
+        } else {
+            throw new Error(result.error || 'Failed to send feedback');
+        }
+
+    } catch (error) {
+        console.error('Feedback error:', error);
+        alert('Error sending feedback. Please try again.');
+    } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = translations[currentLanguage].sendFeedbackBtn;
+    }
+}
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', initializeLanguage);
+    </script>
+</body>
+</html>
