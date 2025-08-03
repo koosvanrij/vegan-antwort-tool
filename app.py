@@ -12,6 +12,9 @@ import warnings
 from langdetect import detect
 from datetime import datetime, timezone
 from deep_translator import GoogleTranslator
+from memory_profiler import profile
+
+
 # ===== RATE LIMITER IMPORTS =====
 from functools import wraps
 import time
@@ -145,12 +148,19 @@ with open("antworten.json", "r", encoding="utf-8") as f:
     antwort_db = json.load(f)
 
 # Embeddings für alle Argumente in der DB erstellen (einmalig beim Start)
-print("Erstelle Embeddings für Datenbank...")
-db_arguments = [eintrag["argument"] for eintrag in antwort_db]
-db_embeddings = model.encode(db_arguments)
-print(f"Embeddings für {len(db_arguments)} Argumente erstellt!")
+#print("Erstelle Embeddings für Datenbank...")
+#db_arguments = [eintrag["argument"] for eintrag in antwort_db]
+#db_embeddings = model.encode(db_arguments)
+#print(f"Embeddings für {len(db_arguments)} Argumente erstellt!")
+# Antworten und Embeddings laden
+with open("antworten.json", "r", encoding="utf-8") as f:
+    antwort_db = json.load(f)
+
+db_embeddings = np.load("db_embeddings.npy")
 
 
+
+@profile
 def translate_to_english(text, detected_language):
     """
     Translate user argument to English using Google Translate (no Claude API calls!)
@@ -192,7 +202,7 @@ def translate_from_english(english_text, target_language):
         print(f"DEBUG: Google Translation from English failed: {e}")
         return english_text  # Fallback to English
 
-
+@profile
 def find_best_match(user_argument, threshold=0.75):
     """
     Findet das beste semantische Match in der Datenbank
