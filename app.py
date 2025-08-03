@@ -12,8 +12,6 @@ import warnings
 from langdetect import detect
 from datetime import datetime, timezone
 from deep_translator import GoogleTranslator
-from memory_profiler import profile
-
 
 # ===== RATE LIMITER IMPORTS =====
 from functools import wraps
@@ -160,7 +158,6 @@ db_embeddings = np.load("db_embeddings.npy")
 
 
 
-@profile
 def translate_to_english(text, detected_language):
     """
     Translate user argument to English using Google Translate (no Claude API calls!)
@@ -202,7 +199,6 @@ def translate_from_english(english_text, target_language):
         print(f"DEBUG: Google Translation from English failed: {e}")
         return english_text  # Fallback to English
 
-@profile
 def find_best_match(user_argument, threshold=0.75):
     """
     Findet das beste semantische Match in der Datenbank
