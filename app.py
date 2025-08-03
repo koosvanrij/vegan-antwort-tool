@@ -31,7 +31,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database
 db = SQLAlchemy(app)
-
+migrate = Migrate(app, db)
 
 # ===== RATE LIMITER SETUP =====
 class SimpleRateLimiter:
