@@ -131,6 +131,10 @@ class ClaudeLog(db.Model):
     timestamp = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     promoted_to_db = db.Column(db.Boolean, default=False)
 
+# create DB
+with app.app_context():
+    db.create_all()
+
 # Claude-Client initialisieren
 client = anthropic.Anthropic(
     api_key=os.getenv("ANTHROPIC_API_KEY")
@@ -145,11 +149,6 @@ print("Modell geladen!")
 with open("antworten.json", "r", encoding="utf-8") as f:
     antwort_db = json.load(f)
 
-# Embeddings für alle Argumente in der DB erstellen (einmalig beim Start)
-#print("Erstelle Embeddings für Datenbank...")
-#db_arguments = [eintrag["argument"] for eintrag in antwort_db]
-#db_embeddings = model.encode(db_arguments)
-#print(f"Embeddings für {len(db_arguments)} Argumente erstellt!")
 # Antworten und Embeddings laden
 with open("antworten.json", "r", encoding="utf-8") as f:
     antwort_db = json.load(f)
