@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VEGAN Frequently Encountered Arguments</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #92b88b 0%, #4c7551 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .controls {
+            background: rgba(255,255,255,0.95);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            min-width: 250px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3d8549;
+            box-shadow: 0 0 15px rgba(40, 92, 53, 0.3);
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .lang-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            color: #495057;
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, #92b88b, #4c7551);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 92, 53, 0.3);
+        }
+
+        .lang-btn:hover:not(.active) {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+
+        .tag-filter {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tag-filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #92b88b;
+            border-radius: 20px;
+            background: transparent;
+            color: #92b88b;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .tag-filter-btn:hover,
+        .tag-filter-btn.active {
+            background: #92b88b;
+            color: white;
+        }
+
+        .faq-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .faq-item {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+
+        .faq-question {
+            padding: 20px 20px 15px 20px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+
+        .faq-question h3 {
+            color: #495057;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .faq-question .tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #92b88b;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .tag.ethics,
+        .tag.ethik,
+        .tag.ethiek {
+            background: #9a56b6;
+        }
+
+        .tag.health,
+        .tag.gesundheit,
+        .tag.gezondheid {
+            background: #27ae60;
+        }
+
+        .tag.environment,
+        .tag.umwelt,
+        .tag.milieu {
+            background: #2ecc71;
+        }
+
+        .tag.practical,
+        .tag.praktisch {
+            background: #519bd3;
+        }
+
+        .faq-answer {
+            padding: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .faq-answer p {
+            margin-bottom: 15px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .faq-answer p:last-child {
+            margin-bottom: 0;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255,255,255,0.8);
+            font-size: 1.2em;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255,255,255,0.8);
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .search-input {
+                min-width: 100%;
+            }
+
+            .tag-filter {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Vegan FEA</h1>
+            <h2>Frequently Encountered Arguments</h2>
+        </div>
+
+        <div class="controls">
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search arguments...">
+            </div>
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="en">English</button>
+                <button class="lang-btn" data-lang="de">Deutsch</button>
+                <button class="lang-btn" data-lang="nl">Nederlands</button>
+            </div>
+            <div class="tag-filter" id="tagFilter">
+                <!-- Tags will be populated dynamically -->
+            </div>
+        </div>
+
+        <div id="faqContainer" class="faq-list">
+            <div class="loading">Loading FAQ data...</div>
+        </div>
+    </div>
+
+    <script>
+        class MultilingualFAQ {
+            constructor() {
+                this.currentLang = 'en';
+                this.faqData = {};
+                this.filteredData = [];
+                this.searchTerm = '';
+                this.activeTagFilters = new Set();
+                this.availableTags = new Set();
+
+                this.init();
+            }
+
+            async init() {
+                await this.loadFAQData();
+                this.bindEvents();
+                this.buildTagFilter();
+                this.renderFAQ();
+            }
+
+            async loadFAQData() {
+                try {
+                    // Load your generated JSON files
+                    const languages = ['en', 'de', 'nl'];
+                    const promises = languages.map(async (lang) => {
+                        const response = await fetch(`../faq-data/faq_${lang}.json`);
+                        if (!response.ok) {
+                            throw new Error(`Failed to load faq_${lang}.json`);
+                        }
+                        return response.json();
+                    });
+
+                    const results = await Promise.all(promises);
+
+                    // Map results to languages
+                    languages.forEach((lang, index) => {
+                        this.faqData[lang] = results[index];
+                    });
+
+                    this.filteredData = this.faqData[this.currentLang];
+                    this.collectTags();
+
+                    console.log(`Loaded FAQ data: ${Object.keys(this.faqData).map(lang =>
+                        `${lang}: ${this.faqData[lang].length} items`).join(', ')}`);
+
+                } catch (error) {
+                    console.error('Error loading FAQ data:', error);
+                    // Fallback: show error message
+                    document.getElementById('faqContainer').innerHTML = `
+                        <div class="no-results">
+                            <h3>Error loading FAQ data</h3>
+                            <p>Please make sure the FAQ JSON files are in the ./faq-data/ folder:</p>
+                            <ul style="text-align: left; display: inline-block;">
+                                <li>../faq-data/faq_en.json</li>
+                                <li>../faq-data/faq_de.json</li>
+                                <li>../faq-data/faq_nl.json</li>
+                            </ul>
+                        </div>
+                    `;
+                }
+            }
+
+            collectTags() {
+                this.availableTags.clear();
+                const data = this.faqData[this.currentLang] || [];
+                data.forEach(item => {
+                    item.tags.forEach(tag => this.availableTags.add(tag));
+                });
+            }
+
+            buildTagFilter() {
+                const tagFilterContainer = document.getElementById('tagFilter');
+                const sortedTags = Array.from(this.availableTags).sort();
+
+                tagFilterContainer.innerHTML = sortedTags.map(tag =>
+                    `<button class="tag-filter-btn" data-tag="${tag}">${tag}</button>`
+                ).join('');
+
+                // Add event listeners to tag filter buttons
+                tagFilterContainer.querySelectorAll('.tag-filter-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const tag = e.target.dataset.tag;
+
+                        if (this.activeTagFilters.has(tag)) {
+                            this.activeTagFilters.delete(tag);
+                            e.target.classList.remove('active');
+                        } else {
+                            this.activeTagFilters.add(tag);
+                            e.target.classList.add('active');
+                        }
+
+                        this.filterFAQ();
+                        this.renderFAQ();
+                    });
+                });
+            }
+
+            bindEvents() {
+                // Language switching
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelector('.lang-btn.active').classList.remove('active');
+                        e.target.classList.add('active');
+                        this.currentLang = e.target.dataset.lang;
+                        this.activeTagFilters.clear();
+                        this.collectTags();
+                        this.buildTagFilter();
+                        this.filterFAQ();
+                        this.renderFAQ();
+                    });
+                });
+
+                // Search functionality
+                const searchInput = document.getElementById('searchInput');
+                searchInput.addEventListener('input', (e) => {
+                    this.searchTerm = e.target.value.toLowerCase();
+                    this.filterFAQ();
+                    this.renderFAQ();
+                });
+
+                // Update placeholder text based on language
+                this.updatePlaceholder();
+            }
+
+            updatePlaceholder() {
+                const searchInput = document.getElementById('searchInput');
+                const placeholders = {
+                    en: "Search arguments...",
+                    de: "Argumente suchen...",
+                    nl: "Zoek argumenten..."
+                };
+                searchInput.placeholder = placeholders[this.currentLang];
+            }
+
+            filterFAQ() {
+                let data = this.faqData[this.currentLang] || [];
+
+                // Filter by search term
+                if (this.searchTerm) {
+                    data = data.filter(item =>
+                        item.question.toLowerCase().includes(this.searchTerm) ||
+                        item.answer.toLowerCase().includes(this.searchTerm) ||
+                        item.tags.some(tag => tag.toLowerCase().includes(this.searchTerm))
+                    );
+                }
+
+                // Filter by active tags
+                if (this.activeTagFilters.size > 0) {
+                    data = data.filter(item =>
+                        Array.from(this.activeTagFilters).some(filterTag =>
+                            item.tags.includes(filterTag)
+                        )
+                    );
+                }
+
+                this.filteredData = data;
+            }
+
+            renderFAQ() {
+                const container = document.getElementById('faqContainer');
+                this.updatePlaceholder();
+
+                if (this.filteredData.length === 0) {
+                    const noResultsText = {
+                        en: "No results found for your search or filter criteria.",
+                        de: "Keine Ergebnisse für Ihre Suche oder Filterkriterien gefunden.",
+                        nl: "Geen resultaten gevonden voor uw zoekopdracht of filtercriteria."
+                    };
+                    container.innerHTML = `<div class="no-results">${noResultsText[this.currentLang]}</div>`;
+                    return;
+                }
+
+                container.innerHTML = this.filteredData.map(item => `
+                    <div class="faq-item" data-id="${item.id}">
+                        <div class="faq-question">
+                            <h3>${item.question}</h3>
+                            <div class="tags">
+                                ${item.tags.map(tag => `<span class="tag ${tag}">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="faq-answer">
+                            <p>${item.answer}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Method to load data from external JSON files
+            async loadFromJSON(baseUrl) {
+                const languages = ['en', 'de', 'nl'];
+                const promises = languages.map(lang =>
+                    fetch(`${baseUrl}/faq_${lang}.json`).then(res => res.json())
+                );
+
+                try {
+                    const results = await Promise.all(promises);
+                    languages.forEach((lang, index) => {
+                        this.faqData[lang] = results[index];
+                    });
+                    this.filteredData = this.faqData[this.currentLang];
+                    this.collectTags();
+                    this.buildTagFilter();
+                    this.renderFAQ();
+                } catch (error) {
+                    console.error('Error loading FAQ data:', error);
+                }
+            }
+        }
+
+        // Initialize the FAQ system
+        document.addEventListener('DOMContentLoaded', () => {
+            const faq = new MultilingualFAQ();
+
+            // Uncomment and modify this line to load from external JSON files:
+            // faq.loadFromJSON('/path/to/your/json/files');
+        });
+    </script>
+</body>
+</html>

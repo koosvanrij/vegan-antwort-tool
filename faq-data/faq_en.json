@@ -1,0 +1,448 @@
+[
+  {
+    "id": 1,
+    "question": "Cows need to be milked",
+    "answer": "Cows only produce milk when they've been pregnant and have a calf. In nature, they would nurse their own calves, not humans. To continue to produce milk, the cows are impregnated, and their calves taken away.",
+    "tags": [
+      "animals"
+    ]
+  },
+  {
+    "id": 2,
+    "question": "Plants have feelings too",
+    "answer": "Plants don't have a nervous system and therefore cannot feel pain like animals do. Even if they would show reactions, far more plants are needed to feed farm animals than for direct human consumption.",
+    "tags": [
+      "ethics",
+      "animals"
+    ]
+  },
+  {
+    "id": 3,
+    "question": "Eating meat and animal products is my personal choice",
+    "answer": "Each choice is a personal choice. Still each choice can have consequences for your surroundings. Labeling a choice as personal doesn't make these consequences disappear.",
+    "tags": [
+      "social",
+      "animals"
+    ]
+  },
+  {
+    "id": 4,
+    "question": "Vegans eat so much soy and tofu, which kills the Amazon rainforest",
+    "answer": "Around 80% of the soy from the Amazon area is used to feed farm animals. Most of the rest for cooking oil. Most of the soy for human consumption is produced locally.",
+    "tags": [
+      "ethics",
+      "environment",
+      "practical",
+      "animals"
+    ]
+  },
+  {
+    "id": 5,
+    "question": "Eatings Eggs is OK, the hens dont suffer",
+    "answer": "Eating eggs contributes to cruelty because male chicks are killed at birth and hens suffer harsh conditions and early slaughter, regardless of farming methods, since most eggs come from profit-driven factory farms.",
+    "tags": [
+      "ethics",
+      "animals"
+    ]
+  },
+  {
+    "id": 6,
+    "question": "If everyone would go vegan there would not be enough food",
+    "answer": "On the contrary, because farm animals need so much to eat to produce. 80% of the farmable land is currently used to produce animal products, contributing to only 20% of the calories we consume.",
+    "tags": [
+      "environment",
+      "practical",
+      "animals"
+    ]
+  },
+  {
+    "id": 7,
+    "question": "We are on the top of the food chain, humans are the APEX predator",
+    "answer": "Calling humans apex predators to justify eating animals is flawed, because the terms \"food chain\" and \"circle of life\" don't actually apply to human food systems, and humans don't need to eat animals to survive, so the \"might makes right\" argument isn't ethically valid.",
+    "tags": [
+      "myths",
+      "practical",
+      "animals"
+    ]
+  },
+  {
+    "id": 8,
+    "question": "veganism is just another woke trend. It will pass",
+    "answer": "Veganism is more than a trend - it's a conscious lifestyle choice rooted in ethics, environmental concerns, and health, and its growing popularity reflects increasing awareness of these issues.",
+    "tags": [
+      "ethics",
+      "health",
+      "environment",
+      "social"
+    ]
+  },
+  {
+    "id": 9,
+    "question": "Crops ans harvests for vegans kill animals too",
+    "answer": "It's true that some animals are unintentionally killed during crop harvesting, but eating animal products causes far more animal deaths overall because much more land and crops are used to feed farm animals than to directly feed humans",
+    "tags": [
+      "ethics",
+      "environment",
+      "animals"
+    ]
+  },
+  {
+    "id": 10,
+    "question": "animals are not intelligent enough, and they dont feel pain like we do",
+    "answer": "Animals clearly show care, affection and love and try to avoid pain. Animals can suffer, and are aware that they suffer. This is scientifically proven.",
+    "tags": [
+      "ethics",
+      "animals"
+    ]
+  },
+  {
+    "id": 11,
+    "question": "Eating animals does not cause diseases.",
+    "answer": "The animal agriculture industry is a significant breeding ground for new viruses due to the high density of animals confined in close quarters, often under unhygienic conditions. These factors, combined with the widespread and heavy use of antibiotics in many countries to promote growth and prevent disease, create ideal circumstances for the emergence and transmission of infectious agents. This environment facilitates virus spread among animals and increases the risk of zoonotic transmission to humans, while antibiotic overuse drives antibiotic resistance, compounding public health risks.",
+    "tags": [
+      "health",
+      "environment",
+      "social",
+      "animals"
+    ]
+  },
+  {
+    "id": 12,
+    "question": "Animals eat animals too, so why should we not. Lions eat animals too.",
+    "answer": "Many animals do things humans wouldn't consider acceptable, like lions killing rival babies. If we really want to compare, our closest relatives, bonobos, mostly eat fruit and live peacefully. Humans have the ability to choose ethics over natural behavior, so \"animals eat animals\" isn't a good excuse for us to do the same.",
+    "tags": [
+      "ethics",
+      "myths",
+      "animals"
+    ]
+  },
+  {
+    "id": 13,
+    "question": "Going vegan is too hard",
+    "answer": "In by far most countries, people buy food from markets and supermarkets. It is not hard to get complete vegan food there, and also not more expensive.",
+    "tags": [
+      "practical"
+    ]
+  },
+  {
+    "id": 14,
+    "question": "If I go vegan I will become an outsider. It is socially difficult. What will friends and family say.",
+    "answer": "Choosing veganism is a decision that reflects your values. While it might feel difficult at first, many people find supportive communities and new friendships through veganism. Also, standing by your beliefs often brings respect, even from those who don't share your choices. Becoming an \"outsider\" can instead be an opportunity to connect with like-minded people and inspire positive change. Being authentic to yourself is more important than conforming to social expectations.",
+    "tags": [
+      "ethics",
+      "social"
+    ]
+  },
+  {
+    "id": 15,
+    "question": "I love aninals too, we just sometimes need to kill them for food",
+    "answer": "Great that you love animals. It's actually common to love animals yet ignore the suffering in the meat, egg, and dairy industries - psychologists call this cognitive dissonance and moral disengagement. The industry fuels it with marketing showing happy farm animals, even cartoons of them \"willingly\" giving milk, eggs, or meat.",
+    "tags": [
+      "ethics",
+      "practical",
+      "animals"
+    ]
+  },
+  {
+    "id": 16,
+    "question": "My religion allows me to eat meat",
+    "answer": "Some religions allow eating meat, but it's never mandatory. Given the scale of today's animal industry compared to centuries ago, choosing not to support it can very well align with most religious values",
+    "tags": [
+      "social",
+      "animals"
+    ]
+  },
+  {
+    "id": 17,
+    "question": "What about wool",
+    "answer": "Almost all wool comes from industrial wool farms, where efficiency and production rates are more important that animal wellbeing. And just like hens and dairy cows, as soon as a sheept produces less wool, it is slaughtered quickly",
+    "tags": [
+      "ethics",
+      "animals"
+    ]
+  },
+  {
+    "id": 18,
+    "question": "Eating animal products is legal",
+    "answer": "The fact that eating animal products is legal today doesn't mean it's right, especially given the scale of suffering involved. Legality isn't the same as morality. Many things were once legal - slavery, child labor, denying women to vote. Laws often lag behind ethics.",
+    "tags": [
+      "ethics",
+      "animals"
+    ]
+  },
+  {
+    "id": 19,
+    "question": "comparing animal industry to the holocaust",
+    "answer": "A comparison with the holocaust is not correct and not useful. There is no need to compare the animal industry with things like this. It is bad enough on it's own.",
+    "tags": [
+      "animals"
+    ]
+  },
+  {
+    "id": 20,
+    "question": "Vegans need to supplement Vitamin B12. So a vegan diet is unnatural.",
+    "answer": "Farm animals are being supplemented B12 in large quantities, so indirectly it is in those products also supplemented. B12 comes from bacteria. Many people have a B12 shortage, much more than there are vegans.",
+    "tags": [
+      "health",
+      "myths",
+      "practical",
+      "animals"
+    ]
+  },
+  {
+    "id": 21,
+    "question": "Would you eat meat if you had no other choice? Stranded on a desert island with a pig?",
+    "answer": "If you lived in a place where there was plenty plant-based food, would you choose to kill animals and eat them for no reason other than your dietary preference? Also, what anybody would do in an extreme scenario does not give any guidance for behavior in non-extreme scenarios",
+    "tags": [
+      "ethics",
+      "environment",
+      "social",
+      "practical",
+      "animals"
+    ]
+  },
+  {
+    "id": 22,
+    "question": "It makes no difference when I go vegan",
+    "answer": "each vegan saves hundreds of animals per year, reduces more greenhouse emissions than non-vegans and uses a fraction of the fresh water resources. And, many individuals together make a bigger difference.",
+    "tags": [
+      "environment",
+      "animals"
+    ]
+  },
+  {
+    "id": 23,
+    "question": "I honor the animals that I eat.",
+    "answer": "Animals are not honored or respected when they are slaughtered. The term carries a nostalgia of nomad tribes in a huge wilderniss, thanking the spirits for the animal they need to survive. The living situation of most of us, and the massive animal industry are far away from this.",
+    "tags": [
+      "ethics",
+      "animals"
+    ]
+  },
+  {
+    "id": 24,
+    "question": "I don't eat animal babies, no lamb.",
+    "answer": "Beef cattle is slaughtered at 18-24 months, their lifespan is 15-20 years. Pigs and also sheep around 6-8 months, they could become 10-15 years. Meat chickens even after 5-7 weeks. So basically, all of them were still babies. Only dairy cows, egg-hens and wool sheep live a bit longer, until their productivity declines",
+    "tags": [
+      "ethics",
+      "animals"
+    ]
+  },
+  {
+    "id": 25,
+    "question": "Our early ancestors ate meat.",
+    "answer": "Homo Sapiens has over thousands of years shown a high flexibiity on which diets individuals can survive and thrive. Ranging from fish or meat-heavy to fruit-heavy. It just proves we have the choice to decide to do the right thing.",
+    "tags": [
+      "social",
+      "myths"
+    ]
+  },
+  {
+    "id": 26,
+    "question": "vegan food is boring and tasts bad.",
+    "answer": "Many dishes that people love are already vegan by nature. And, trying vegan dishes actually becomes a pleasant tasteful discovery journey for new vegans.",
+    "tags": [
+      "practical"
+    ]
+  },
+  {
+    "id": 27,
+    "question": "vegans don't get enough iron",
+    "answer": "Red meat has been advertized for years as source for iron. But many plants have more than enough iron (for example lentilles, spinach, chocolate). Also, the heme iron found in meat can lead to too much iron which causes diseases, mainly with elderly men.",
+    "tags": [
+      "health"
+    ]
+  },
+  {
+    "id": 28,
+    "question": "vegans don't get enough protein",
+    "answer": "Meat has long been advertized as source of protein. But many plants offer more than enough protein (soy, other legumes, grains) and also contain all essential amino acids.",
+    "tags": [
+      "health",
+      "environment"
+    ]
+  },
+  {
+    "id": 29,
+    "question": "we need to test on animals",
+    "answer": "testing for cosmetics or household products is not necessary anymore, but still happenig. Testing on new food, only due to legislation. And for Pharmaceutical purposes, it remains questionanble to what degree tests on animals are even representative for use with humans. A large part of the animal testing is not necessary, but promoted by the testing industry that wants to keep growing.",
+    "tags": [
+      "practical",
+      "animals"
+    ]
+  },
+  {
+    "id": 30,
+    "question": "We have canine teeth, so we are meat eaters",
+    "answer": "Our canines cannot rip through animal skin. Even gorillas who are plant eaters have way larger canines. Our teeth don't tell us very much. Fact is humans can live on all sorts of diets. That gives us the choice to decide to do the right thing.",
+    "tags": [
+      "social",
+      "myths",
+      "animals"
+    ]
+  },
+  {
+    "id": 31,
+    "question": "We are omnivores",
+    "answer": "Homo Sapiens has over thousands of years shown a high flexibiity on which diets individuals can survive and thrive. Ranging from fish or meat-heavy to fruit-heavy. It just proves we have the choice to decide to do the right thing.",
+    "tags": [
+      "social",
+      "myths"
+    ]
+  },
+  {
+    "id": 32,
+    "question": "what about honey",
+    "answer": "Bees make honey for themselves, and taking it, especially in commercial production, still exploits and can harm them, so why not choose plant-based alternatives instead, such as maple, agava, date syrup",
+    "tags": [
+      "animals"
+    ]
+  },
+  {
+    "id": 33,
+    "question": "I only eat biological, humane meat and animal products",
+    "answer": "It's very hard to consistently eat only truly humane or biological animal products, since you rarely have full control over where they come from-especially in restaurants, packaged foods, and supermarket items. Labels like \"organic\" usually mean only modest improvements in animal welfare. For example, dairy cows are still regularly bred and slaughtered young, causing ongoing suffering. Because of these realities, many people choose veganism to avoid the uncertainty and systemic harm involved in animal product consumption.",
+    "tags": [
+      "ethics",
+      "practical",
+      "animals"
+    ]
+  },
+  {
+    "id": 34,
+    "question": "it is part of our culture and tradition",
+    "answer": "Culture and tradition serve to build community and family ties, and should not be used to justify specific behaviors. They can develop. You can honor the connections while choosing alternatives that align with your ethics. You don't have to follow cultural practices that conflict with your values, and by making ethical choices, you can help develop the traditions in your community.",
+    "tags": [
+      "ethics",
+      "social"
+    ]
+  },
+  {
+    "id": 35,
+    "question": "vegan parenting is brainwashing your children",
+    "answer": "Parents try to teach their children values and raise them happy en healthy. One could argue that it is stranger to teach them to love dogs and dont care about pigs, than to care for those animals equally. Also, raising children vegan is not about forcing ideology blindly but about providing age-appropriate information and care, allowing children to develop their own understanding as they grow",
+    "tags": [
+      "health",
+      "myths",
+      "animals"
+    ]
+  },
+  {
+    "id": 36,
+    "question": "you cannot be 100% vegan",
+    "answer": "The fact that perfection is hard doesn't mean we should do nothing. Currently, animal industry byproducts show up everywhere. In glues, envelopes, cosmetics, and countless other everyday items. . As the demand for animal products declines, industries will replace these ingredients with plant-based or synthetic alternatives, making it ever easier to live without exploiting animals.",
+    "tags": [
+      "practical",
+      "animals"
+    ]
+  },
+  {
+    "id": 37,
+    "question": "So we should kill all the animals now? That is cruel",
+    "answer": "Such a change will never happen instantly. But as most animals are slaughtered at a very young age, reducing the volume of breeding would even have an almost instant effect.",
+    "tags": [
+      "ethics",
+      "animals"
+    ]
+  },
+  {
+    "id": 38,
+    "question": "Farm animals would go extinct due to vegans",
+    "answer": "Wild boars, aurochs, and jungle fowl didn't need farming to survive for millennia. We're not 'preserving' species by mass-producing them for slaughter - we're exploiting artificial breeds that often can't even survive naturally due to selective breeding for production.",
+    "tags": [
+      "ethics",
+      "myths",
+      "animals"
+    ]
+  },
+  {
+    "id": 39,
+    "question": "Why do vegan products always look like animal products",
+    "answer": "A lot of vegans are vegan for ethical reasons, not because they did not like the taste. So why not enjoy the same, just without animal suffering and climate impact.",
+    "tags": [
+      "ethics",
+      "environment",
+      "practical",
+      "animals"
+    ]
+  },
+  {
+    "id": 40,
+    "question": "vegan products are full of chemical ingredients",
+    "answer": "Some products contain thickeners or flavors, so do non-vegan precooked products. But many vegan manufacturers only use natural ingredients. And of course one could always choose to not buy processed food",
+    "tags": [
+      "myths",
+      "practical"
+    ]
+  },
+  {
+    "id": 41,
+    "question": "I tried vegan once, it tasted terrible",
+    "answer": "Sorry for your experience. No need to bite into a block of raw tofu though. New vegans tend to try a lot of dishes. All are able to find plenty tasteful ones. And many dishes are vegan by nature.",
+    "tags": [
+      "practical"
+    ]
+  },
+  {
+    "id": 42,
+    "question": "The human brain developed thanks to meat consumption",
+    "answer": "The consumption of meat may have played a role, or not. This has not been proven. Also it certainly never was the sole driver. Otherwise crocodiles would have developed huge brains a hundred million years ago.",
+    "tags": [
+      "myths"
+    ]
+  },
+  {
+    "id": 43,
+    "question": "vegans are fanatic fundamentalists, and extremists",
+    "answer": "I choose veganism for compassion and health, not out of fanaticism.",
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": 44,
+    "question": "vegans are hypocrites, animals die for you too",
+    "answer": "The fact that perfection is hard doesn't mean we should do nothing. We can choose to reduce animal suffering as much as we can.",
+    "tags": [
+      "ethics",
+      "practical",
+      "animals"
+    ]
+  },
+  {
+    "id": 45,
+    "question": "if we are not supposed to eat animals, why do they taste so good",
+    "answer": "Mostly meat is cooked, baked and seasoned before eaten. But yes our brains have evolved to prefer food with the highest nutritional density. Which was useful for nomad hunters, but in our society it is a main cause of people eating too much.",
+    "tags": [
+      "health",
+      "myths",
+      "practical",
+      "animals"
+    ]
+  },
+  {
+    "id": 46,
+    "question": "Hitler was a vegetarian",
+    "answer": "Not exactly sure what the point is, but he reportedly mainly ate vegetarian after 1938, because his doctors advised him that, for health reasons.",
+    "tags": [
+      "general"
+    ]
+  },
+  {
+    "id": 47,
+    "question": "Vegans always look unhealthy",
+    "answer": "Everyone's health and appearance vary regardless of diet. Many vegans are vibrant and healthy because of their plant-based lifestyle, and skin tone or looks aren't determined by diet alone",
+    "tags": [
+      "health"
+    ]
+  },
+  {
+    "id": 48,
+    "question": "Men get breasts from eating tofu and soy",
+    "answer": "This is a myth with no scientific basis. Soy contains plant compounds that are much weaker than human hormones and don't affect testosterone or breast development in men. Many healthy populations worldwide consume soy regularly without these effects. Clinical studies consistently show soy is safe for men.",
+    "tags": [
+      "health",
+      "environment"
+    ]
+  }
+]

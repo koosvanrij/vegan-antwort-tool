@@ -1,0 +1,18 @@
+{
+  "generated": "2025-08-18T16:50:37.380Z",
+  "languages": {
+    "en": {
+      "file": "faq-data/faq_en.json",
+      "count": 48
+    },
+    "de": {
+      "file": "faq-data/faq_de.json",
+      "count": 48
+    },
+    "nl": {
+      "file": "faq-data/faq_nl.json",
+      "count": 48
+    }
+  },
+  "totalItems": 144
+}

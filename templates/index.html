@@ -2,20 +2,28 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vegane Antworthilfe</title>
-    <link rel="stylesheet" href="/static/style.css">
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #ebedeb 0%, #c6f1ca 100%);
+            line-height: 1.6;
         }
 
         /* Header with hamburger menu */
         .header {
-            background: #4CAF50;
+            background: linear-gradient(135deg, #92b88b 0%, #4c7551 100%);
             padding: 15px 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -27,18 +35,23 @@
             color: white;
             font-size: 24px;
             cursor: pointer;
-            padding: 5px;
-            transition: all 0.3s;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .hamburger:hover {
             background: rgba(255,255,255,0.2);
-            border-radius: 5px;
         }
 
         .language-selector {
             display: flex;
-            gap: 5px;
+            gap: 8px;
         }
 
         .lang-btn {
@@ -46,21 +59,19 @@
             border: 2px solid white;
             background: transparent;
             color: white;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             font-size: 12px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
         }
 
-        .lang-btn.active {
+        .lang-btn.active, .lang-btn:hover {
             background: white;
-            color: #4CAF50;
-        }
-
-        .lang-btn:hover {
-            background: white;
-            color: #4CAF50;
+            color: #67ba6a;
         }
 
         /* Slide-out menu */
@@ -91,7 +102,7 @@
             background: white;
             z-index: 1001;
             transition: left 0.3s ease;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
         }
 
         .slide-menu.active {
@@ -99,7 +110,7 @@
         }
 
         .menu-header {
-            background: #4CAF50;
+            background: linear-gradient(135deg, #92b88b 0%, #4c7551 100%);
             color: white;
             padding: 20px;
             font-size: 18px;
@@ -115,7 +126,17 @@
             color: white;
             font-size: 24px;
             cursor: pointer;
-            padding: 5px;
+            padding: 8px;
+            border-radius: 6px;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-menu:hover {
+            background: rgba(255,255,255,0.2);
         }
 
         .menu-items {
@@ -130,25 +151,28 @@
 
         .menu-link {
             display: block;
-            padding: 15px 20px;
+            padding: 18px 20px;
             color: #333;
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             cursor: pointer;
+            min-height: 54px;
+            display: flex;
+            align-items: center;
         }
 
         .menu-link:hover, .menu-link.active {
             background: #f5f5f5;
-            color: #4CAF50;
-            border-left: 4px solid #4CAF50;
+            color: #92b88b;
+            border-left: 4px solid #92b88b;
         }
 
         /* Main content */
         .main-content {
             max-width: 800px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 20px;
         }
 
         .section {
@@ -159,137 +183,97 @@
             display: block;
         }
 
-        .meta-info {
-            margin-top: 15px;
-            padding: 10px;
-            background: #f5f5f5;
-            border-radius: 5px;
-            font-size: 0.9em;
-            color: #666;
-        }
-        .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            margin: 2px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-weight: bold;
-        }
-        .badge.database {
-            background: #e8f5e8;
-            color: #2e7d32;
-        }
-        .badge.api {
-            background: #e3f2fd;
-            color: #1565c0;
-        }
-        .answer {
-            padding: 15px;
-            background: #f0f8f0;
-            border-left: 4px solid #4CAF50;
-            border-radius: 5px;
-            margin: 15px 0;
-            line-height: 1.6;
-        }
-        .error {
-            padding: 15px;
-            background: #ffebee;
-            border-left: 4px solid #f44336;
-            border-radius: 5px;
-            color: #c62828;
-        }
-        .instruction {
-            margin: 20px 0;
-            padding: 15px;
-            background: #f8f9fa;
+        /* Form elements */
+        textarea, select, input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #ddd;
             border-radius: 8px;
-            color: #555;
-            line-height: 1.6;
-            text-align: center;
-            border-left: 4px solid #4CAF50;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            margin: 10px 0;
+            transition: border-color 0.3s ease;
         }
-        .copy-btn {
-            margin-top: 10px;
-            padding: 8px 16px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        .copy-btn:hover {
-            background: #45a049;
-        }
-        .copy-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        .copy-btn.copied {
-            background: #2e7d32;
-        }
-        .btn {
-            padding: 8px 16px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-            margin-right: 10px;
-            margin-top: 10px;
-        }
-        .btn:hover {
-            background: #45a049;
-        }
-        .btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        .btn.secondary {
-            background: #81C784;
-        }
-        .btn.secondary:hover {
-            background: #66BB6A;
+
+        textarea:focus, select:focus, input:focus {
+            border-color: #67ba6a;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
         }
 
         textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+            min-height: 120px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 16px 24px;
+            background: #53c63c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 10px 10px 0;
+            min-height: 54px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            background: #67ba71;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .copy-btn {
+            padding: 12px 20px;
+            background: #67ba6a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
             font-size: 14px;
-            font-family: inherit;
-            resize: vertical;
-            box-sizing: border-box;
-            margin: 10px 0;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            min-height: 44px;
         }
 
-        textarea:focus {
-            border-color: #4CAF50;
-            outline: none;
+        .copy-btn:hover {
+            background: #45a049;
         }
 
+        .copy-btn.copied {
+            background: #2e7d32;
+        }
+
+        /* Content styling */
         h1 {
             text-align: center;
             color: #2e7d32;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
         }
 
         h2 {
             color: #2e7d32;
-            border-bottom: 2px solid #4CAF50;
+            border-bottom: 3px solid #4CAF50;
             padding-bottom: 10px;
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
         }
 
-        .tips-content {
-            line-height: 1.6;
-        }
-
-        .tips-content h3 {
+        h3 {
             color: #2e7d32;
             margin-top: 25px;
             margin-bottom: 10px;
@@ -297,15 +281,68 @@
             padding-bottom: 5px;
         }
 
-        .tips-content ul {
-            margin: 10px 0;
-            padding-left: 20px;
+        .instruction {
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            color: #555;
+            line-height: 1.6;
+            text-align: center;
+            border-left: 4px solid #4CAF50;
+            font-size: 16px;
         }
 
-        .tips-content li {
-            margin-bottom: 8px;
+        .answer {
+            padding: 20px;
+            background: linear-gradient(135deg, #f0f8f0 0%, #e8f5e8 100%);
+            border-left: 4px solid #4CAF50;
+            border-radius: 12px;
+            margin: 20px 0;
+            line-height: 1.6;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
+        .error {
+            padding: 20px;
+            background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+            border-left: 4px solid #f44336;
+            border-radius: 12px;
+            color: #c62828;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .meta-info {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            margin: 3px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .badge.database {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .badge.api {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        /* Forms */
         .contact-form {
             max-width: 500px;
             margin: 0 auto;
@@ -317,50 +354,169 @@
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 600;
             color: #2e7d32;
+            font-size: 16px;
         }
 
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-            box-sizing: border-box;
+        /* Lists */
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
         }
 
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: #4CAF50;
-            outline: none;
+        li {
+            margin-bottom: 8px;
+            line-height: 1.6;
         }
 
         /* Mobile responsiveness */
         @media (max-width: 768px) {
             .header {
-                padding: 12px 15px;
+                padding: 12px 16px;
             }
 
             .slide-menu {
-                width: 250px;
-                left: -250px;
+                width: min(280px, calc(100vw - 40px));
             }
 
             .main-content {
-                padding: 20px 15px;
+                padding: 16px;
+            }
+
+            .language-selector {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap; /* Erlaubt Umbruch, aber kontrolliert */
+                justify-content: center; /* Zentriert die Buttons */
+            }
+
+            .lang-btn {
+                padding: 6px 8px;
+                font-size: 11px;
+                min-height: 40px;
+            }
+
+            .instruction {
+                padding: 16px;
+                font-size: 15px;
+            }
+
+            .btn {
+                width: 100%;
+                margin: 10px 0;
+                padding: 18px;
+            }
+
+            .copy-btn {
+                width: 100%;
+                padding: 16px;
+            }
+
+            textarea, select, input {
+                padding: 14px;
+            }
+
+            .answer, .error {
+                padding: 16px;
+                font-size: 15px;
+            }
+
+            .meta-info {
+                padding: 12px;
+                font-size: 13px;
             }
         }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 10px 12px;
+            }
+
+            .slide-menu {
+                width: calc(100vw - 20px);
+                left: calc(-100vw + 20px);
+            }
+
+            .slide-menu.active {
+                left: 0;
+            }
+
+            .main-content {
+                padding: 12px;
+            }
+
+            .language-selector {
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .lang-btn {
+                padding: 8px;
+                font-size: 10px;
+                min-height: 36px;
+            }
+
+            h1 {
+                margin-bottom: 16px;
+            }
+
+            .instruction {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            textarea {
+                min-height: 100px;
+                padding: 12px;
+            }
+
+            .btn, .copy-btn {
+                font-size: 15px;
+            }
+        }
+
+        /* Touch improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .btn:hover, .copy-btn:hover, .menu-link:hover, .hamburger:hover, .close-menu:hover, .lang-btn:hover {
+                transform: none;
+                box-shadow: none;
+            }
+
+            .btn:active, .copy-btn:active {
+                transform: scale(0.98);
+            }
+        }
+        /* High contrast mode support */
+        @media (prefers-contrast: more) {
+            .btn, .copy-btn {
+                border: 2px solid currentColor;
+            }
+
+            .answer, .error, .instruction {
+                border: 1px solid currentColor;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+
     </style>
 </head>
 <body>
     <!-- Header with hamburger menu and language selector -->
     <div class="header">
-        <button class="hamburger" onclick="toggleMenu()">☰</button>
+        <button class="hamburger" onclick="toggleMenu()" aria-label="Menu öffnen">☰</button>
         <div class="language-selector">
-            <button class="lang-btn" onclick="switchLanguage('de')">🇩🇪 DE</button>
-            <button class="lang-btn" onclick="switchLanguage('en')">🇬🇧 EN</button>
-            <button class="lang-btn" onclick="switchLanguage('nl')">🇳🇱 NL</button>
+            <button class="lang-btn" onclick="switchLanguage('de')" aria-label="Deutsch">🇩🇪 DE</button>
+            <button class="lang-btn" onclick="switchLanguage('en')" aria-label="English">🇬🇧 EN</button>
+            <button class="lang-btn" onclick="switchLanguage('nl')" aria-label="Nederlands">🇳🇱 NL</button>
         </div>
     </div>
 
@@ -369,7 +525,7 @@
     <div class="slide-menu">
         <div class="menu-header">
             <span id="menuTitle">Menu</span>
-            <button class="close-menu" onclick="closeMenu()">×</button>
+            <button class="close-menu" onclick="closeMenu()" aria-label="Menu schließen">×</button>
         </div>
         <ul class="menu-items">
             <li class="menu-item">
@@ -395,7 +551,7 @@
         <div id="home" class="section active">
             <h1 id="title">Vegane Antworthilfe 💬🌱</h1>
             <p id="instruction" class="instruction">Du bist in einer Diskussion, vielleicht in den sozialen Medien, und jemand schreibt ein Anti-Vegan-Argument. Suchst du nach einer schnellen, angemessenen Antwort? Füge das Argument hier ein oder tippe es und lass dir einen Antwortvorschlag generieren. Du kannst in jeder Sprache schreiben - die Sprache wird erkannt und die Antwort erfolgt in derselben Sprache.</p>
-            <textarea id="argument" placeholder="Gib hier ein Anti-Vegan-Argument ein..."></textarea>
+            <textarea id="argument" placeholder="Gib hier ein Anti-Vegan-Argument ein..." aria-label="Anti-Vegan-Argument eingeben"></textarea>
             <button id="generateBtn" class="btn" onclick="antwortAnfordern()">Antwort erzeugen</button>
             <div id="antwort"></div>
         </div>
@@ -415,7 +571,7 @@
 
         <!-- DISCUSSION TIPS SECTION -->
         <div id="discussion-tips" class="section">
-            <h2 id="discussionTipsTitle">Over online discussies</h2>
+            <h2 id="discussionTipsTitle">Über online discussies</h2>
             <div id="discussionTipsContent" class="tips-content">
                 <!-- Content will be populated by JavaScript based on selected language -->
             </div>
@@ -433,7 +589,7 @@
             <div class="contact-form">
                 <div class="form-group">
                     <label for="feedbackType" id="feedbackTypeLabel">Art des Feedbacks:</label>
-                    <select id="feedbackType" class="form-group input">
+                    <select id="feedbackType">
                         <option value="suggestion" id="suggestionOption">Verbesserungsvorschlag</option>
                         <option value="bug" id="bugOption">Fehler melden</option>
                         <option value="question" id="questionOption">Frage</option>
@@ -745,7 +901,6 @@
         function toggleMenu() {
             const overlay = document.querySelector('.menu-overlay');
             const menu = document.querySelector('.slide-menu');
-
             overlay.classList.add('active');
             menu.classList.add('active');
         }
@@ -753,30 +908,20 @@
         function closeMenu() {
             const overlay = document.querySelector('.menu-overlay');
             const menu = document.querySelector('.slide-menu');
-
             overlay.classList.remove('active');
             menu.classList.remove('active');
         }
 
         // Navigation functions
         function showSection(sectionId) {
-            // Close menu when section is selected
             closeMenu();
-
-            // Hide all sections
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
-
-            // Show selected section
             document.getElementById(sectionId).classList.add('active');
-
-            // Update menu navigation
             document.querySelectorAll('.menu-link').forEach(link => {
                 link.classList.remove('active');
             });
-
-            // Find and activate the correct menu link
             const menuLinks = {
                 'home': 'menu-home',
                 'how-it-works': 'menu-how',
@@ -784,12 +929,11 @@
                 'about': 'menu-about',
                 'contact': 'menu-contact'
             };
-
             document.getElementById(menuLinks[sectionId]).classList.add('active');
             currentSection = sectionId;
         }
 
-        // Initialize language based on browser preference
+        // Initialize language
         function initializeLanguage() {
             const browserLang = navigator.language.slice(0, 2);
             const supportedLangs = ['de', 'en', 'nl'];
@@ -797,7 +941,6 @@
             switchLanguage(initialLang);
         }
 
-        // Switch language function
         function switchLanguage(lang) {
             currentLanguage = lang;
             const t = translations[lang];
@@ -816,7 +959,7 @@
             document.getElementById('argument').placeholder = t.placeholder;
             document.getElementById('generateBtn').textContent = t.generateBtn;
 
-            // Update how it works section
+            // Update how it works
             document.getElementById('howItWorksTitle').textContent = t.howItWorksTitle;
             const howItWorksList = document.getElementById('howItWorksList');
             howItWorksList.innerHTML = '';
@@ -826,15 +969,15 @@
                 howItWorksList.appendChild(li);
             });
 
-            // Update discussion tips section
+            // Update discussion tips
             document.getElementById('discussionTipsTitle').textContent = t.discussionTipsTitle;
             document.getElementById('discussionTipsContent').innerHTML = t.discussionTipsContent;
 
-            // Update about section
+            // Update about
             document.getElementById('aboutTitle').textContent = t.aboutTitle;
             document.getElementById('aboutContent').innerHTML = t.aboutContent;
 
-            // Update contact section
+            // Update contact
             document.getElementById('contactTitle').textContent = t.contactTitle;
             document.getElementById('feedbackTypeLabel').textContent = t.feedbackTypeLabel;
             document.getElementById('suggestionOption').textContent = t.suggestionOption;
@@ -846,23 +989,20 @@
             document.getElementById('sendFeedbackBtn').textContent = t.sendFeedbackBtn;
             document.getElementById('feedbackMessage').placeholder = t.feedbackPlaceholder;
 
-            // Update page language and title
+            // Update page
             document.querySelector('html').lang = lang;
             document.querySelector('title').textContent = t.title.replace(' 💬🌱', '');
 
             // Update active language button
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event?.target?.classList.add('active') ||
-            document.querySelector(`[onclick="switchLanguage('${lang}')"]`).classList.add('active');
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            const activeButton = document.querySelector(`[onclick="switchLanguage('${lang}')"]`);
+            if (activeButton) activeButton.classList.add('active');
         }
 
-        // Copy to clipboard function
+        // Copy function
         async function copyToClipboard() {
             const t = translations[currentLanguage];
             const copyBtn = document.getElementById('copyBtn');
-
             if (!lastAnswer) return;
 
             try {
@@ -889,7 +1029,7 @@
             }
         }
 
-        // Main function to request answer
+        // Main answer function
         async function antwortAnfordern() {
             const argument = document.getElementById("argument").value.trim();
             const generateBtn = document.getElementById("generateBtn");
@@ -946,56 +1086,79 @@
             }
         }
 
-// Send feedback function
-async function sendFeedback() {
-    const type = document.getElementById('feedbackType').value;
-    const message = document.getElementById('feedbackMessage').value.trim();
-    const email = document.getElementById('feedbackEmail').value.trim();
-    const sendBtn = document.getElementById('sendFeedbackBtn');
+        // Feedback function
+        async function sendFeedback() {
+            const type = document.getElementById('feedbackType').value;
+            const message = document.getElementById('feedbackMessage').value.trim();
+            const email = document.getElementById('feedbackEmail').value.trim();
+            const sendBtn = document.getElementById('sendFeedbackBtn');
 
-    if (!message) {
-        alert('Please enter a message!');
-        return;
-    }
+            if (!message) {
+                alert('Please enter a message!');
+                return;
+            }
 
-    sendBtn.disabled = true;
-    sendBtn.textContent = 'Sending...';
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
 
-    try {
-        // Send to your Flask backend
-        const response = await fetch('/feedback', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                message: `[${type}] ${message}`, // Include feedback type in message
-                email: email || null
-            })
-        });
+            try {
+                const response = await fetch('/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: `[${type}] ${message}`,
+                        email: email || null
+                    })
+                });
 
-        const result = await response.json();
+                const result = await response.json();
 
-        if (response.ok && result.success) {
-            alert('Thank you for your feedback!');
-            // Clear the form
-            document.getElementById('feedbackMessage').value = '';
-            document.getElementById('feedbackEmail').value = '';
-            document.getElementById('feedbackType').value = 'suggestion'; // Reset to default
-        } else {
-            throw new Error(result.error || 'Failed to send feedback');
+                if (response.ok && result.success) {
+                    alert('Thank you for your feedback!');
+                    document.getElementById('feedbackMessage').value = '';
+                    document.getElementById('feedbackEmail').value = '';
+                    document.getElementById('feedbackType').value = 'suggestion';
+                } else {
+                    throw new Error(result.error || 'Failed to send feedback');
+                }
+
+            } catch (error) {
+                console.error('Feedback error:', error);
+                alert('Error sending feedback. Please try again.');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = translations[currentLanguage].sendFeedbackBtn;
+            }
         }
 
-    } catch (error) {
-        console.error('Feedback error:', error);
-        alert('Error sending feedback. Please try again.');
-    } finally {
-        sendBtn.disabled = false;
-        sendBtn.textContent = translations[currentLanguage].sendFeedbackBtn;
-    }
-}
-        // Initialize language on page load
-        document.addEventListener('DOMContentLoaded', initializeLanguage);
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLanguage();
+
+            // Add select-all functionality
+            const argumentInput = document.getElementById('argument');
+            if (argumentInput) {
+                argumentInput.addEventListener('focus', function() {
+                    setTimeout(() => {
+                        try {
+                            this.select();
+                        } catch (e) {
+                            this.setSelectionRange(0, this.value.length);
+                        }
+                    }, 10);
+                });
+
+                argumentInput.addEventListener('click', function() {
+                    setTimeout(() => {
+                        try {
+                            this.select();
+                        } catch (e) {
+                            this.setSelectionRange(0, this.value.length);
+                        }
+                    }, 10);
+                });
+            }
+        });
     </script>
 </body>
 </html>

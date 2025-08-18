@@ -329,9 +329,9 @@ def antwort():
     # Kein Match gefunden → Claude API verwenden (only 1 Claude call needed now!)
 
     # SCHRITT 1: Relevanz prüfen
-    relevanz_prompt = f"""Is this argument related to veganism, soy, tofu, animal welfare, nutrition, environment, or ethics? Answer only "YES" or "NO".
+    relevanz_prompt = f"""Is this argument related to veganism, soy, tofu, animal welfare, zoo, nutrition, environment, or ethics? Answer only "YES" or "NO".
 
-Argument: "{english_argument}" """
+Argument: "{argument}" """
 
     try:
         relevanz_message = client.messages.create(
@@ -364,18 +364,20 @@ Argument: "{english_argument}" """
                     "detected_language": detected_lang
                 })
 
-        # SCHRITT 2: Vegan-Antwort generieren (in English, then translate)
+        # Ersetze den SCHRITT 2 Teil mit diesem:
+
+        # SCHRITT 2: Vegan-Antwort generieren (Claude erkennt Sprache selbst)
         antwort_prompt = f"""As an experienced vegan, respond respectfully and factually to anti-vegan arguments.
 
-Argument: "{english_argument}"
+        Argument: "{argument}"
 
-Give a short, fact-based response (max 50 words) that:
-- Is polite but firm
-- Clarifies misconceptions  
-- Encourages reflection
-- Contains no lecturing
+        Give a short, fact-based response (max 50 words) that:
+        - Is polite but firm
+        - Clarifies misconceptions  
+        - Encourages reflection
+        - Contains no lecturing
 
-Answer in English."""
+        IMPORTANT: Detect the language of the argument and respond in the SAME language as the original argument."""
 
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
@@ -385,11 +387,15 @@ Answer in English."""
             ]
         )
 
-        english_response = message.content[0].text.strip()
+        # Claude antwortet direkt in der richtigen Sprache - keine Übersetzung nötig!
+        final_response = message.content[0].text.strip()
 
-        # Translate Claude's English response to user language (Google Translate - FREE!)
-        final_response = translate_from_english(english_response, detected_lang)
-
+        return jsonify({
+            "antwort": final_response,
+            "quelle": "claude_api",
+            "detected_language": detected_lang,  # Für Info, aber nicht für Übersetzung verwendet
+            "aehnlichkeit": 0.0
+        })
         # LOGGING
         try:
             new_claude_log = ClaudeLog(
@@ -481,4 +487,4 @@ if __name__ == "__main__":
         print("Database tables created!")
         print("Rate limiter activated: 8 requests per 5 minutes per IP")
 
-    app.run(debug=False)
+    app.run(debug=True)

@@ -9,6 +9,7 @@ with open("antworten.json", "r", encoding="utf-8") as f:
 # 2️⃣ Modell laden
 model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
+
 # 3️⃣ Embeddings berechnen
 embeddings = model.encode(antwort_db, convert_to_numpy=True, show_progress_bar=True)
 
