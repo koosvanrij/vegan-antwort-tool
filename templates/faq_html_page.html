@@ -247,10 +247,14 @@
 <body>
     <div class="container">
         <div class="header">
+            <div style="position: absolute; top: 20px; left: 20px;">
+                <a href="index.html" style="color: white; text-decoration: none; background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 25px; font-weight: bold; transition: all 0.3s ease;">
+                    ← Zurück zur Hauptseite
+                </a>
+            </div>
             <h1>Vegan FEA</h1>
             <h2>Frequently Encountered Arguments</h2>
         </div>
-
         <div class="controls">
             <div class="search-container">
                 <input type="text" class="search-input" id="searchInput" placeholder="Search arguments...">
@@ -291,17 +295,24 @@
             }
 
             async loadFAQData() {
-                try {
-                    // Load your generated JSON files
-                    const languages = ['en', 'de', 'nl'];
-                    const promises = languages.map(async (lang) => {
-                        const response = await fetch(`../faq-data/faq_${lang}.json`);
-                        if (!response.ok) {
-                            throw new Error(`Failed to load faq_${lang}.json`);
-                        }
-                        return response.json();
-                    });
+            try {
+                const languages = ['en', 'de', 'nl'];
 
+                // Erkenne, ob lokal oder online
+                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const baseUrl = isLocal
+                    ? '/faq-data/faq_' // Lokal im faq-data Ordner
+                    : 'https://raw.githubusercontent.com/koosvanrij/vegan-antwort-tool/main/faq_'; // GitHub
+
+                const promises = languages.map(async (lang) => {
+                    const response = await fetch(`${baseUrl}${lang}.json`);
+                    if (!response.ok) {
+                        throw new Error(`Failed to load faq_${lang}.json`);
+                    }
+                    return response.json();
+                });
+
+        // Rest bleibt gleich...
                     const results = await Promise.all(promises);
 
                     // Map results to languages
