@@ -230,6 +230,10 @@ def find_best_match(user_argument, threshold=0.75):
 def index():
     return render_template("index.html")
 
+@app.route('/faq_html_page')  # for the link to the faq page <--
+def faq():
+    return render_template('faq_html_page.html')
+
 
 @app.route("/feedback", methods=["POST"])
 def submit_feedback():

@@ -209,7 +209,7 @@
         /* Buttons */
         .btn {
             padding: 16px 24px;
-            background: #53c63c;
+            background: #6ecc5b;
             color: white;
             border: none;
             border-radius: 8px;
@@ -544,7 +544,7 @@
                 <a class="menu-link" onclick="showSection('contact')" id="menu-contact">📧 Kontakt</a>
             </li>
             <li class="menu-item">
-                <a class="menu-link" href="faq_html_page.html" id="menu-faq">❓Alle Argumente</a>
+                <a class="menu-link" href="/faq_html_page" id="menu-faq">❓Alle Argumente</a>
             </li>
         </ul>
     </div>
@@ -933,7 +933,8 @@
                 'how-it-works': 'menu-how',
                 'discussion-tips': 'menu-tips',
                 'about': 'menu-about',
-                'contact': 'menu-contact'
+                'contact': 'menu-contact',
+                'faq': 'menu-faq'
             };
             document.getElementById(menuLinks[sectionId]).classList.add('active');
             currentSection = sectionId;
