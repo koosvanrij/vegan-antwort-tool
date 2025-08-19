@@ -302,7 +302,7 @@
                 const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                 const baseUrl = isLocal
                     ? '/faq-data/faq_' // Lokal im faq-data Ordner
-                    : 'https://raw.githubusercontent.com/koosvanrij/vegan-antwort-tool/main/faq_'; // GitHub
+                    : 'https://raw.githubusercontent.com/koosvanrij/vegan-antwort-tool/main/faq-data/faq_'; // GitHub
 
                 const promises = languages.map(async (lang) => {
                     const response = await fetch(`${baseUrl}${lang}.json`);
