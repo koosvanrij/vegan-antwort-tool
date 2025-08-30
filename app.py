@@ -368,8 +368,6 @@ Argument: "{argument}" """
                     "detected_language": detected_lang
                 })
 
-        # Ersetze den SCHRITT 2 Teil mit diesem:
-
         # SCHRITT 2: Vegan-Antwort generieren (Claude erkennt Sprache selbst)
         antwort_prompt = f"""As an experienced vegan, respond respectfully and factually to anti-vegan arguments.
 
@@ -394,12 +392,6 @@ Argument: "{argument}" """
         # Claude antwortet direkt in der richtigen Sprache - keine Übersetzung nötig!
         final_response = message.content[0].text.strip()
 
-        return jsonify({
-            "antwort": final_response,
-            "quelle": "claude_api",
-            "detected_language": detected_lang,  # Für Info, aber nicht für Übersetzung verwendet
-            "aehnlichkeit": 0.0
-        })
         # LOGGING
         try:
             new_claude_log = ClaudeLog(
@@ -415,9 +407,10 @@ Argument: "{argument}" """
         return jsonify({
             "antwort": final_response,
             "quelle": "claude_api",
-            "aehnlichkeit": float(round(similarity, 3)),
-            "detected_language": detected_lang
+            "detected_language": detected_lang,  # Für Info, aber nicht für Übersetzung verwendet
+            "aehnlichkeit": 0.0
         })
+
 
     except Exception as e:
         return jsonify({
