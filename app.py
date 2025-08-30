@@ -368,6 +368,9 @@ Argument: "{argument}" """
                     "detected_language": detected_lang
                 })
 
+        # Verzögerung vor dem zweiten Call to avoid Claude 529 error
+        time.sleep(0.2)  # 200ms
+
         # SCHRITT 2: Vegan-Antwort generieren (Claude erkennt Sprache selbst)
         antwort_prompt = f"""As an experienced vegan, respond respectfully and factually to anti-vegan arguments.
 
