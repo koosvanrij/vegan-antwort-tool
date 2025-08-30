@@ -198,7 +198,7 @@ def translate_from_english(english_text, target_language):
         print(f"DEBUG: Google Translation from English failed: {e}")
         return english_text  # Fallback to English
 
-def find_best_match(user_argument, threshold=0.75):
+def find_best_match(user_argument, threshold=0.80):
     """
     Findet das beste semantische Match in der Datenbank
 
