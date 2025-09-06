@@ -12,6 +12,7 @@ import warnings
 from langdetect import detect
 from datetime import datetime, timezone
 from deep_translator import GoogleTranslator
+import deepl
 
 # ===== RATE LIMITER IMPORTS =====
 from functools import wraps
@@ -198,6 +199,83 @@ def translate_from_english(english_text, target_language):
         print(f"DEBUG: Google Translation from English failed: {e}")
         return english_text  # Fallback to English
 
+import deepl
+
+# DeepL Translator initialisieren (einmalig beim Start, wie dein Sentence Transformer)
+print("Initialisiere DeepL Translator...")
+try:
+    deepl_translator = deepl.Translator(os.getenv("DEEPL_API_KEY"))
+    print("DeepL Translator bereit!")
+except Exception as e:
+    print(f"DeepL Initialization failed: {e}")
+    deepl_translator = None
+
+# DeepL language code mapping
+DEEPL_LANG_MAP = {
+    'de': 'DE',
+    'nl': 'NL',
+    'fr': 'FR',
+    'es': 'ES',
+    'it': 'IT',
+    'pt': 'PT',
+    'ru': 'RU',
+    'ja': 'JA',
+    'zh': 'ZH',
+    'pl': 'PL',
+    'af': 'NL',  # Deine Afrikaans->Dutch Logik beibehalten
+    'en': 'EN',  # Für Vollständigkeit
+}
+
+def translate_to_english_deepl(text, detected_language):
+    """
+    Translate user argument to English using DeepL (fallback to Google)
+    """
+    if detected_language == 'en':
+        return text
+
+    # Fix common langdetect confusion: treat Afrikaans as Dutch
+    if detected_language == 'af':
+        detected_language = 'nl'
+
+    # Try DeepL first
+    if deepl_translator and detected_language in DEEPL_LANG_MAP:
+        try:
+            source_lang = DEEPL_LANG_MAP[detected_language]
+            result = deepl_translator.translate_text(text, source_lang=source_lang, target_lang='EN-US')
+            english_text = result.text
+            print(f"DEBUG: DeepL Translate '{text}' ({detected_language}) to English: '{english_text}'")
+            return english_text
+        except Exception as e:
+            print(f"DEBUG: DeepL Translation to English failed: {e}, falling back to Google")
+
+    # Fallback to Google Translate
+    return translate_to_english(text, detected_language)
+
+def translate_from_english_deepl(english_text, target_language):
+    """
+    Translate English answer to target language using DeepL (fallback to Google)
+    """
+    if target_language == 'en':
+        return english_text
+
+    # Fix common langdetect confusion: treat Afrikaans as Dutch
+    if target_language == 'af':
+        target_language = 'nl'
+
+    # Try DeepL first
+    if deepl_translator and target_language in DEEPL_LANG_MAP:
+        try:
+            target_lang = DEEPL_LANG_MAP[target_language]
+            result = deepl_translator.translate_text(english_text, target_lang=target_lang)
+            translated_text = result.text
+            print(f"DEBUG: DeepL Translate '{english_text}' (en) to {target_language}: '{translated_text}'")
+            return translated_text
+        except Exception as e:
+            print(f"DEBUG: DeepL Translation from English failed: {e}, falling back to Google")
+
+    # Fallback to Google Translate
+    return translate_from_english(english_text, target_language)
+
 def find_best_match(user_argument, threshold=0.80):
     """
     Findet das beste semantische Match in der Datenbank
@@ -306,7 +384,7 @@ def antwort():
         print(f"DEBUG: Language detection failed, defaulting to English. Error: {e}")
 
     # NEW: Translate user argument to English for database search (Google Translate - FREE!)
-    english_argument = translate_to_english(argument, detected_lang)
+    english_argument = translate_to_english_deepl(argument, detected_lang)
     print(f"DEBUG: Searching database with English argument: '{english_argument}'")
 
     # Semantische Suche in der Datenbank (now with English argument)
@@ -318,7 +396,7 @@ def antwort():
 
         # Translate answer to detected language (Google Translate - FREE!)
         print(f"DEBUG: Database match - Translating answer from English to '{detected_lang}'")
-        translated_answer = translate_from_english(english_answer, detected_lang)
+        translated_answer = translate_from_english_deepl(english_answer, detected_lang)
         print(f"DEBUG: Final translated answer: '{translated_answer}'")
 
         return jsonify({
@@ -330,60 +408,27 @@ def antwort():
             "english_search_term": english_argument  # DEBUG info
         })
 
-    # Kein Match gefunden → Claude API verwenden (only 1 Claude call needed now!)
+    # Kein Match gefunden → Claude API verwenden
+    # Direkter Claude API Call für Vegan-Antwort
+    antwort_prompt = f"""As an experienced vegan, respond respectfully and factually to anti-vegan arguments.
 
-    # SCHRITT 1: Relevanz prüfen
-    relevanz_prompt = f"""Is this argument related to veganism, soy, tofu, animal welfare, zoo, nutrition, environment, or ethics? Answer only "YES" or "NO".
+    Argument: "{argument}"
 
-Argument: "{argument}" """
+    Give a short, fact-based response (max 50 words) that:
+    - Is polite but firm
+    - Clarifies misconceptions  
+    - Encourages reflection
+    - Contains no lecturing
+
+    CRITICAL: You MUST respond in the SAME language as the argument, even for non-relevant topics. 
+- If argument is in German → respond in German
+- If argument is in Spanish → respond in Spanish
+- If argument is in French → respond in French
+- etc.
+
+NEVER respond in English unless the original argument was in English"""
 
     try:
-        relevanz_message = client.messages.create(
-            model="claude-sonnet-4-20250514",
-            max_tokens=10,
-            messages=[  # type: ignore
-                {"role": "user", "content": relevanz_prompt}
-            ]
-        )
-        relevanz_check = relevanz_message.content[0].text.strip().upper()
-
-        if "NO" in relevanz_check:
-            # Argument ist nicht vegan-relevant
-            not_relevant_response = "This argument doesn't seem to be vegan-related. I'm happy to help with questions about vegan nutrition or animal welfare."
-
-            # Translate to user language using Google Translate (not Claude!)
-            if detected_lang != 'en':
-                translated_response = translate_from_english(not_relevant_response, detected_lang)
-                return jsonify({
-                    "antwort": translated_response,
-                    "quelle": "claude_api_not_relevant",
-                    "aehnlichkeit": 0.0,
-                    "detected_language": detected_lang
-                })
-            else:
-                return jsonify({
-                    "antwort": not_relevant_response,
-                    "quelle": "claude_api_not_relevant",
-                    "aehnlichkeit": 0.0,
-                    "detected_language": detected_lang
-                })
-
-        # Verzögerung vor dem zweiten Call to avoid Claude 529 error
-        time.sleep(0.2)  # 200ms
-
-        # SCHRITT 2: Vegan-Antwort generieren (Claude erkennt Sprache selbst)
-        antwort_prompt = f"""As an experienced vegan, respond respectfully and factually to anti-vegan arguments.
-
-        Argument: "{argument}"
-
-        Give a short, fact-based response (max 50 words) that:
-        - Is polite but firm
-        - Clarifies misconceptions  
-        - Encourages reflection
-        - Contains no lecturing
-
-        IMPORTANT: Detect the language of the argument and respond in the SAME language as the original argument."""
-
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=1000,
